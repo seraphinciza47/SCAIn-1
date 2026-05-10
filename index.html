@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCAIn-1 — ISP Bukavu</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+
+  <style>
+    /* ============================================================
+       VARIABLES & RESET
+    ============================================================ */
+    :root {
+      --bg-deep:       #060b13;
+      --bg-mid:        #0b1422;
+      --bg-card:       rgba(255,255,255,0.045);
+      --border:        rgba(255,255,255,0.08);
+      --border-glow:   rgba(99,179,237,0.38);
+      --accent:        #63b3ed;
+      --accent2:       #9f7aea;
+      --accent3:       #68d391;
+      --danger:        #fc8181;
+      --text-hi:       #eef2ff;
+      --text-mid:      #a0aec0;
+      --text-lo:       #4a5568;
+      --glass:         rgba(10,18,34,0.75);
+      --glass-card:    rgba(15,24,42,0.6);
+      --blur:          blur(20px);
+      --radius:        14px;
+      --radius-lg:     22px;
+      --shadow:        0 8px 48px rgba(0,0,0,0.6);
+      --shadow-glow:   0 0 40px rgba(99,179,237,0.12);
+      --transition:    0.22s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-hi);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 90% 70% at 15% 5%,  rgba(99,179,237,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 85% 85%, rgba(159,122,234,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(104,211,145,0.03) 0%, transparent 60%),
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px) 0 0 / 52px 52px,
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px) 0 0 / 52px 52px;
+      z-index: 0; pointer-events: none;
+    }
+
+    /* ============================================================
+       SPINNER
+    ============================================================ */
+    #global-spinner {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-deep); transition: opacity 0.4s;
+    }
+    #global-spinner.hidden { opacity: 0; pointer-events: none; }
+    .spinner-ring {
+      width: 54px; height: 54px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       TOAST NOTIFICATIONS
+    ============================================================ */
+    #toast-container {
+      position: fixed; top: 20px; right: 20px;
+      z-index: 8888; display: flex; flex-direction: column; gap: 10px;
+    }
+    .toast {
+      padding: 13px 20px; border-radius: 10px;
+      font-size: 0.875rem; font-weight: 500;
+      backdrop-filter: var(--blur);
+      animation: slideIn 0.3s ease, fadeOut 0.4s ease 3s forwards;
+      max-width: 340px; display: flex; align-items: center; gap: 10px;
+    }
+    .toast.success { background: rgba(104,211,145,0.15); border: 1px solid rgba(104,211,145,0.35); color: var(--accent3); }
+    .toast.error   { background: rgba(252,129,129,0.13); border: 1px solid rgba(252,129,129,0.32); color: var(--danger); }
+    .toast.info    { background: rgba(99,179,237,0.12);  border: 1px solid rgba(99,179,237,0.3);   color: var(--accent); }
+    @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes fadeOut { to   { opacity: 0; transform: translateX(120%); } }
+
+    /* ============================================================
+       HEADER / NAV  — Glassmorphism
+    ============================================================ */
+    header {
+      position: sticky; top: 0; z-index: 500;
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid rgba(99,179,237,0.12);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.35);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 24px; height: 66px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .logo-wrap {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .logo-img {
+      width: 40px; height: 40px; border-radius: 10px;
+      object-fit: cover; border: 1px solid rgba(99,179,237,0.25);
+      background: var(--bg-card);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 1rem; color: var(--accent); overflow: hidden;
+    }
+    .logo-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--text-hi); letter-spacing: -0.5px; }
+    .logo-text span { color: var(--accent); }
+    .logo-sub { font-size: 0.65rem; color: var(--text-mid); font-weight: 400; display: block; letter-spacing: 0.5px; }
+
+    nav { display: flex; gap: 4px; margin-left: auto; align-items: center; }
+    .nav-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 8px 16px; border-radius: 8px;
+      font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500;
+      color: var(--text-mid); transition: var(--transition);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .nav-btn:hover { color: var(--text-hi); background: var(--bg-card); }
+    .nav-btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; padding: 8px 20px;
+    }
+    .nav-btn.primary:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 18px rgba(99,179,237,0.25); }
+    .nav-btn.ghost { border: 1px solid var(--border); }
+    .nav-btn.ghost:hover { border-color: var(--accent); color: var(--accent); background: rgba(99,179,237,0.07); }
+
+    /* Google Sign-in Button */
+    #btn-google-login {
+      display: flex; align-items: center; gap: 9px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.13);
+      color: var(--text-hi); padding: 8px 18px;
+      border-radius: 9px; cursor: pointer;
+      font-size: 0.875rem; font-family: 'Inter', sans-serif; font-weight: 500;
+      transition: var(--transition); white-space: nowrap;
+    }
+    #btn-google-login:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(99,179,237,0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+    }
+    #btn-google-login img { width: 18px; height: 18px; }
+
+    #user-display {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem; color: var(--text-mid);
+    }
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.8rem; color: #fff; flex-shrink: 0;
+      border: 2px solid rgba(99,179,237,0.3);
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+    /* ============================================================
+       MAIN LAYOUT
+    ============================================================ */
+    main {
+      position: relative; z-index: 1;
+      max-width: 1280px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    .hero { text-align: center; padding: 60px 0 50px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,179,237,0.1); border: 1px solid rgba(99,179,237,0.22);
+      border-radius: 100px; padding: 5px 16px;
+      font-size: 0.78rem; color: var(--accent); margin-bottom: 24px;
+      font-family: 'Space Mono', monospace;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 800; line-height: 1.1;
+      letter-spacing: -1.5px; margin-bottom: 18px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, #f687b3 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero p { font-size: 1.05rem; color: var(--text-mid); max-width: 560px; margin: 0 auto 36px; line-height: 1.7; }
+    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); display: block; }
+    .stat-label { font-size: 0.78rem; color: var(--text-mid); }
+
+    /* ============================================================
+       SEARCH & FILTERS
+    ============================================================ */
+    .search-bar-wrap { position: relative; margin-bottom: 18px; }
+    .search-bar-wrap .search-icon {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--text-lo); pointer-events: none; font-size: 0.9rem;
+    }
+    #search-input {
+      width: 100%; padding: 14px 18px 14px 44px;
+      background: var(--glass-card); border: 1px solid var(--border);
+      border-radius: var(--radius); color: var(--text-hi);
+      font-size: 0.95rem; transition: var(--transition);
+      outline: none; font-family: 'Inter', sans-serif;
+      backdrop-filter: blur(8px);
+    }
+    #search-input:focus { border-color: var(--accent); background: rgba(99,179,237,0.04); box-shadow: 0 0 0 3px rgba(99,179,237,0.1); }
+    #search-input::placeholder { color: var(--text-lo); }
+
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+    .filter-select {
+      padding: 9px 14px; background: var(--glass-card);
+      border: 1px solid var(--border); border-radius: 9px;
+      color: var(--text-mid); font-size: 0.875rem; cursor: pointer;
+      transition: var(--transition); outline: none;
+      font-family: 'Inter', sans-serif; backdrop-filter: blur(8px);
+    }
+    .filter-select:focus, .filter-select:hover { border-color: var(--accent); color: var(--text-hi); }
+    select option { background: #0d1526; }
+
+    /* ============================================================
+       TABS
+    ============================================================ */
+    .tabs {
+      display: flex; gap: 4px; margin-bottom: 28px;
+      background: var(--glass-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 5px;
+      width: fit-content; backdrop-filter: blur(12px);
+    }
+    .tab-btn {
+      padding: 9px 22px; border-radius: 9px;
+      border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500;
+      color: var(--text-mid); background: none; transition: var(--transition);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tab-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 4px 16px rgba(99,179,237,0.25); }
+    .tab-btn:hover:not(.active) { color: var(--text-hi); background: rgba(255,255,255,0.05); }
+
+    /* ============================================================
+       DOCUMENT CARDS GRID  — Glassmorphism
+    ============================================================ */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 18px;
+    }
+    .doc-card {
+      background: var(--glass-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .doc-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0; transition: var(--transition);
+    }
+    .doc-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(99,179,237,0.05) 0%, transparent 70%);
+      opacity: 0; transition: var(--transition); pointer-events: none;
+    }
+    .doc-card:hover { border-color: var(--border-glow); transform: translateY(-4px); box-shadow: var(--shadow), var(--shadow-glow); }
+    .doc-card:hover::before { opacity: 1; }
+    .doc-card:hover::after { opacity: 1; }
+
+    .doc-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .doc-icon {
+      width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+    }
+    .doc-icon.pdf  { background: rgba(252,129,129,0.14); border: 1px solid rgba(252,129,129,0.2); color: var(--danger); }
+    .doc-icon.img  { background: rgba(104,211,145,0.14); border: 1px solid rgba(104,211,145,0.2); color: var(--accent3); }
+    .doc-icon.link { background: rgba(99,179,237,0.14);  border: 1px solid rgba(99,179,237,0.2);  color: var(--accent); }
+
+    .doc-type-badge {
+      font-size: 0.68rem; font-family: 'Space Mono', monospace;
+      padding: 3px 10px; border-radius: 100px;
+      border: 1px solid var(--border); color: var(--text-mid);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .doc-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 8px; line-height: 1.35; }
+    .doc-card p {
+      font-size: 0.82rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 14px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .doc-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .meta-chip {
+      font-size: 0.72rem; padding: 3px 10px; border-radius: 100px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-mid);
+    }
+    .meta-chip.dept  { color: var(--accent);  border-color: rgba(99,179,237,0.25);  background: rgba(99,179,237,0.07); }
+    .meta-chip.promo { color: var(--accent2); border-color: rgba(159,122,234,0.25); background: rgba(159,122,234,0.07); }
+
+    .doc-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .doc-views { font-size: 0.75rem; color: var(--text-lo); display: flex; align-items: center; gap: 5px; font-family: 'Space Mono', monospace; }
+    .doc-actions { display: flex; gap: 7px; }
+    .action-btn {
+      padding: 7px 14px; border-radius: 8px;
+      border: 1px solid var(--border); cursor: pointer;
+      font-size: 0.8rem; font-weight: 500;
+      transition: var(--transition); background: none;
+      color: var(--text-mid); font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .action-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(99,179,237,0.07); }
+    .action-btn.danger { color: var(--danger); border-color: rgba(252,129,129,0.3); }
+    .action-btn.danger:hover { background: rgba(252,129,129,0.09); border-color: var(--danger); }
+    .action-btn.open { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; }
+    .action-btn.open:hover { opacity: 0.88; box-shadow: 0 4px 14px rgba(99,179,237,0.3); }
+
+    /* empty state */
+    .empty-state { text-align: center; padding: 80px 20px; color: var(--text-lo); grid-column: 1/-1; }
+    .empty-state i { font-size: 3rem; margin-bottom: 16px; opacity: 0.25; display: block; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ============================================================
+       MODAL  — Glassmorphism renforcé
+    ============================================================ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 700;
+      background: rgba(6,11,19,0.85);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--glass-card);
+      border: 1px solid rgba(99,179,237,0.15);
+      border-radius: var(--radius-lg);
+      width: 100%; max-width: 540px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 32px;
+      box-shadow: var(--shadow), 0 0 60px rgba(99,179,237,0.07);
+      animation: popIn 0.28s cubic-bezier(.34,1.56,.64,1);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    }
+    @keyframes popIn { from { transform: scale(0.88); opacity: 0; } to { transform: none; opacity: 1; } }
+    .modal-close { float: right; background: none; border: none; color: var(--text-mid); cursor: pointer; font-size: 1.4rem; line-height: 1; padding: 4px; }
+    .modal-close:hover { color: var(--text-hi); }
+    .modal h2 { font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 800; margin-bottom: 24px; clear: both; }
+
+    /* Auth modal — Google only */
+    .google-signin-big {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%; padding: 14px 20px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600;
+      color: var(--text-hi); transition: var(--transition);
+      margin-top: 8px;
+    }
+    .google-signin-big:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(99,179,237,0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+    }
+    .google-signin-big img { width: 22px; height: 22px; }
+    .auth-desc { text-align: center; color: var(--text-mid); font-size: 0.88rem; margin-bottom: 22px; line-height: 1.6; }
+
+    /* Form elements */
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.82rem; color: var(--text-mid); margin-bottom: 7px; font-weight: 500; }
+    .form-group label i { margin-right: 6px; color: var(--accent); }
+    .form-control {
+      width: 100%; padding: 11px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text-hi);
+      font-size: 0.9rem; transition: var(--transition);
+      outline: none; font-family: 'Inter', sans-serif;
+    }
+    .form-control:focus { border-color: var(--accent); background: rgba(99,179,237,0.04); box-shadow: 0 0 0 3px rgba(99,179,237,0.1); }
+    .form-control::placeholder { color: var(--text-lo); }
+    select.form-control { cursor: pointer; }
+    select.form-control option { background: var(--bg-mid); }
+
+    .btn-full {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 10px;
+      color: #fff; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: var(--transition);
+      font-family: 'Syne', sans-serif; letter-spacing: 0.3px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-full:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,179,237,0.3); }
+    .btn-full:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Upload area */
+    .upload-area {
+      border: 2px dashed var(--border); border-radius: 10px;
+      padding: 28px; text-align: center; cursor: pointer;
+      transition: var(--transition); font-size: 0.85rem; color: var(--text-mid);
+    }
+    .upload-area:hover, .upload-area.dragover { border-color: var(--accent); background: rgba(99,179,237,0.05); }
+    .upload-area i { font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.4; }
+    .file-name { font-size: 0.8rem; color: var(--accent3); margin-top: 8px; }
+
+    /* Progress bar */
+    .upload-progress { margin-top: 10px; }
+    .progress-bar { height: 4px; background: var(--border); border-radius: 100px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 100px; transition: width 0.3s; width: 0%; }
+
+    /* ============================================================
+       VIEWER MODAL
+    ============================================================ */
+    .viewer-modal { max-width: 800px; }
+    .viewer-frame-wrap { width: 100%; border-radius: 10px; overflow: hidden; background: #000; margin-top: 16px; }
+    .viewer-frame-wrap iframe, .viewer-frame-wrap img { width: 100%; max-height: 65vh; object-fit: contain; display: block; }
+
+    /* ============================================================
+       CHAT SECTION  — Glassmorphism
+    ============================================================ */
+    .chat-container {
+      background: var(--glass-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      display: flex; flex-direction: column;
+      height: 520px; overflow: hidden;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+    .chat-header {
+      padding: 16px 22px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(99,179,237,0.04);
+    }
+    .chat-header i { color: var(--accent); }
+    .chat-header h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
+    .online-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent3); box-shadow: 0 0 8px var(--accent3); margin-left: auto; }
+
+    .chat-messages { flex: 1; overflow-y: auto; padding: 16px 22px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 100px; }
+
+    .chat-msg { display: flex; gap: 10px; }
+    .chat-msg.own { flex-direction: row-reverse; }
+    .chat-msg .avatar { flex-shrink: 0; width: 30px; height: 30px; font-size: 0.7rem; align-self: flex-end; }
+    .msg-bubble {
+      max-width: 72%; padding: 10px 14px;
+      border-radius: 14px; font-size: 0.875rem; line-height: 1.5;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      position: relative;
+    }
+    .chat-msg.own .msg-bubble {
+      background: linear-gradient(135deg, rgba(99,179,237,0.18), rgba(159,122,234,0.18));
+      border-color: rgba(99,179,237,0.22);
+    }
+    .msg-sender { font-size: 0.72rem; color: var(--text-lo); margin-bottom: 4px; font-weight: 600; }
+    .msg-time { font-size: 0.68rem; color: var(--text-lo); margin-top: 4px; font-family: 'Space Mono', monospace; }
+    .msg-del-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-lo); font-size: 0.75rem;
+      padding: 2px 5px; border-radius: 5px;
+      transition: var(--transition); margin-left: 6px;
+      vertical-align: middle;
+    }
+    .msg-del-btn:hover { color: var(--danger); background: rgba(252,129,129,0.1); }
+
+    .chat-input-wrap {
+      padding: 14px 22px; border-top: 1px solid var(--border);
+      display: flex; gap: 10px; align-items: center;
+    }
+    #chat-input {
+      flex: 1; padding: 10px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 100px; color: var(--text-hi);
+      font-size: 0.875rem; outline: none;
+      transition: var(--transition); font-family: 'Inter', sans-serif;
+    }
+    #chat-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,179,237,0.08); }
+    #chat-input::placeholder { color: var(--text-lo); }
+    .chat-send-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: var(--transition); color: #fff; flex-shrink: 0; font-size: 0.9rem;
+    }
+    .chat-send-btn:hover { transform: scale(1.1); box-shadow: 0 4px 14px rgba(99,179,237,0.3); }
+    .chat-login-notice {
+      padding: 14px 22px; border-top: 1px solid var(--border);
+      text-align: center; font-size: 0.82rem; color: var(--text-mid);
+    }
+    .chat-login-notice a { color: var(--accent); cursor: pointer; }
+
+    /* ============================================================
+       PANELS
+    ============================================================ */
+    #panel-docs, #panel-chat { display: none; }
+    #panel-docs.active, #panel-chat.active { display: block; }
+    .section-heading { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 22px; }
+    .section-heading span { color: var(--accent); }
+
+    .add-doc-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 30px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-lo); font-size: 0.8rem;
+    }
+    footer strong { color: var(--accent); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 640px) {
+      .nav-inner { padding: 0 16px; gap: 10px; }
+      .logo-sub { display: none; }
+      main { padding: 24px 16px 60px; }
+      .hero { padding: 40px 0 36px; }
+      .hero-stats { gap: 24px; }
+      .docs-grid { grid-template-columns: 1fr; }
+      .tabs { width: 100%; }
+      .tab-btn { flex: 1; justify-content: center; }
+      .modal { padding: 22px; }
+      #btn-google-login span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===================== GLOBAL SPINNER ===================== -->
+<div id="global-spinner"><div class="spinner-ring"></div></div>
+
+<!-- ===================== TOAST CONTAINER ===================== -->
+<div id="toast-container"></div>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="nav-inner">
+    <a class="logo-wrap" href="#">
+      <div class="logo-img" id="logo-box">
+        <img src="logo.jpg" alt="SCAIn Logo" onerror="this.style.display='none';this.parentElement.textContent='SC'" />
+      </div>
+      <div>
+        <span class="logo-text">SCAIn<span>-1</span></span>
+        <span class="logo-sub">ISP Bukavu · Plateforme Éducative</span>
+      </div>
+    </a>
+
+    <!-- USER DISPLAY (shown when logged in) -->
+    <div id="user-display" style="display:none;">
+      <div class="avatar" id="user-avatar">?</div>
+      <span id="user-email-short" style="font-size:0.82rem;color:var(--text-mid);"></span>
+    </div>
+
+    <nav>
+      <button class="nav-btn" onclick="showPanel('docs')"><i class="fa-solid fa-folder-open"></i> Documents</button>
+      <button class="nav-btn" onclick="showPanel('chat')"><i class="fa-solid fa-comments"></i> Chat</button>
+
+      <!-- Connexion Google -->
+      <button id="btn-google-login" onclick="loginWithGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+        <span>Se connecter</span>
+      </button>
+
+      <!-- Déconnexion -->
+      <button class="nav-btn primary" id="btn-logout" style="display:none;" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== MAIN CONTENT ===================== -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <i class="fa-solid fa-circle" style="font-size:0.6rem;"></i>
+      Plateforme Officielle — ISP Bukavu
+    </div>
+    <h1>Partagez le <span class="grad">Savoir</span>,<br>Éclairez l'Avenir.</h1>
+    <p>Accédez aux syllabus, examens et ressources pédagogiques de l'ISP Bukavu. Publiez, téléchargez, collaborez.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="stat-docs">0</span><span class="stat-label">Documents</span></div>
+      <div class="stat"><span class="stat-num" id="stat-users">—</span><span class="stat-label">Étudiants</span></div>
+      <div class="stat"><span class="stat-num" id="stat-msgs">0</span><span class="stat-label">Messages</span></div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-docs" onclick="showPanel('docs')">
+      <i class="fa-solid fa-folder-open"></i> Documents
+    </button>
+    <button class="tab-btn" id="tab-chat" onclick="showPanel('chat')">
+      <i class="fa-solid fa-comments"></i> Chat Global
+    </button>
+  </div>
+
+  <!-- =========== PANEL: DOCUMENTS =========== -->
+  <div id="panel-docs" class="active">
+
+    <!-- Search & Filters -->
+    <div class="search-bar-wrap">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" id="search-input" placeholder="Rechercher un document, cours, département…" oninput="filterDocs()" />
+    </div>
+
+    <div class="filters">
+      <select class="filter-select" id="filter-dept" onchange="filterDocs()">
+        <option value=""><i class="fa-solid fa-building-columns"></i> Tous les départements</option>
+        <option value="IG">IG — Informatique de Gestion</option>
+        <option value="GcA">GcA — Gestion Commerciale</option>
+      </select>
+      <select class="filter-select" id="filter-promo" onchange="filterDocs()">
+        <option value="">Toutes les promotions</option>
+        <option value="Bac1">Bac 1</option>
+        <option value="Bac2">Bac 2</option>
+        <option value="Bac3">Bac 3</option>
+        <option value="M1">M1</option>
+        <option value="M2">M2</option>
+      </select>
+      <select class="filter-select" id="filter-type" onchange="filterDocs()">
+        <option value="">Tous les types</option>
+        <option value="PDF">PDF</option>
+        <option value="Image">Image</option>
+        <option value="Lien">Lien</option>
+      </select>
+    </div>
+
+    <!-- Add document bar -->
+    <div class="add-doc-bar">
+      <h2 class="section-heading">Ressources disponibles <span id="doc-count-label"></span></h2>
+      <button class="nav-btn primary" id="btn-add-doc" onclick="openAddDoc()" style="display:none;">
+        <i class="fa-solid fa-plus"></i> Publier un document
+      </button>
+    </div>
+
+    <!-- Documents grid -->
+    <div class="docs-grid" id="docs-grid">
+      <div class="empty-state">
+        <i class="fa-solid fa-file-circle-exclamation"></i>
+        <p>Chargement des documents…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========== PANEL: CHAT =========== -->
+  <div id="panel-chat">
+    <h2 class="section-heading">Discussion <span>Communautaire</span></h2>
+    <div class="chat-container">
+      <div class="chat-header">
+        <i class="fa-solid fa-circle-nodes"></i>
+        <h3>Chat Global ISP</h3>
+        <div class="online-dot"></div>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div id="chat-input-section">
+        <div class="chat-input-wrap" id="chat-input-wrap" style="display:none;">
+          <input type="text" id="chat-input" placeholder="Écrire un message…" maxlength="500"
+                 onkeydown="if(event.key==='Enter') sendMessage()" />
+          <button class="chat-send-btn" onclick="sendMessage()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+        <div class="chat-login-notice" id="chat-login-notice">
+          <a onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> Connectez-vous avec Google</a> pour participer à la discussion.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <p>© 2025 SCAIn-1 — <strong>ISP Bukavu</strong> · Conçu par <strong>Séraphin BALOLA CIZA</strong></p>
+</footer>
+
+<!-- ============================================================
+     MODAL: AUTH — Google Only
+============================================================ -->
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal" style="max-width:420px;">
+    <button class="modal-close" onclick="closeModal('modal-auth')">✕</button>
+    <h2 style="text-align:center;"><i class="fa-solid fa-lock" style="color:var(--accent);margin-right:10px;"></i>Connexion à SCAIn-1</h2>
+    <p class="auth-desc">Connectez-vous avec votre compte Google pour accéder à toutes les fonctionnalités de la plateforme.</p>
+    <button class="google-signin-big" onclick="loginWithGoogle()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+      Continuer avec Google
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: ADD DOCUMENT
+============================================================ -->
+<div class="modal-overlay" id="modal-add-doc">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-add-doc')">✕</button>
+    <h2><i class="fa-solid fa-file-arrow-up" style="color:var(--accent);margin-right:10px;"></i>Publier un Document</h2>
+
+    <div class="form-group">
+      <label><i class="fa-solid fa-heading"></i> Titre du document *</label>
+      <input type="text" class="form-control" id="doc-title" placeholder="Ex: Syllabus Base de données Bac2 IG" />
+    </div>
+    <div class="form-group">
+      <label><i class="fa-solid fa-align-left"></i> Description</label>
+      <input type="text" class="form-control" id="doc-desc" placeholder="Brève description du contenu…" />
+    </div>
+    <div class="form-group">
+      <label><i class="fa-solid fa-building-columns"></i> Département *</label>
+      <select class="form-control" id="doc-dept">
+        <option value="">-- Choisir --</option>
+        <option value="IG">IG — Informatique de Gestion</option>
+        <option value="GcA">GcA — Gestion Commerciale</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label><i class="fa-solid fa-graduation-cap"></i> Promotion *</label>
+      <select class="form-control" id="doc-promo">
+        <option value="">-- Choisir --</option>
+        <option value="Bac1">Bac 1</option>
+        <option value="Bac2">Bac 2</option>
+        <option value="Bac3">Bac 3</option>
+        <option value="M1">M1</option>
+        <option value="M2">M2</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label><i class="fa-solid fa-file"></i> Type de fichier *</label>
+      <select class="form-control" id="doc-type" onchange="toggleDocInput()">
+        <option value="">-- Choisir --</option>
+        <option value="PDF">PDF</option>
+        <option value="Image">Image</option>
+        <option value="Lien">Lien externe</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="url-input-group" style="display:none;">
+      <label><i class="fa-solid fa-link"></i> URL du document</label>
+      <input type="url" class="form-control" id="doc-url" placeholder="https://…" />
+    </div>
+
+    <div class="form-group" id="file-input-group" style="display:none;">
+      <label><i class="fa-solid fa-cloud-arrow-up"></i> Téléverser le fichier</label>
+      <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()"
+           ondragover="event.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handleFileDrop(event)">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        Cliquez ou glissez-déposez votre fichier ici
+        <div class="file-name" id="file-name-display"></div>
+      </div>
+      <input type="file" id="file-input" style="display:none;" onchange="handleFileSelect(event)" />
+      <div class="upload-progress" id="upload-progress" style="display:none;">
+        <p style="font-size:0.78rem;color:var(--text-mid);margin-bottom:6px;" id="upload-status">Envoi en cours…</p>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+    </div>
+
+    <button class="btn-full" id="publish-btn" onclick="publishDocument()">
+      <i class="fa-solid fa-paper-plane"></i> Publier le document
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: DOCUMENT VIEWER
+============================================================ -->
+<div class="modal-overlay" id="modal-viewer">
+  <div class="modal viewer-modal" style="max-width:800px;">
+    <button class="modal-close" onclick="closeModal('modal-viewer')">✕</button>
+    <h2 id="viewer-title">Aperçu du document</h2>
+    <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:6px;" id="viewer-meta"></p>
+    <div class="viewer-frame-wrap" id="viewer-frame-wrap"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;">
+      <a id="viewer-download" href="#" target="_blank" rel="noopener">
+        <button class="action-btn open"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir / Télécharger</button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FIREBASE SDK + APP LOGIC
+============================================================ -->
+<script type="module">
+  // ─── FIREBASE IMPORTS ────────────────────────────────────────────
+  import { initializeApp }                         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider,
+           signInWithPopup, signOut,
+           onAuthStateChanged }                    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc,
+           deleteDoc, doc, onSnapshot, query,
+           orderBy, updateDoc, increment,
+           serverTimestamp }                       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getStorage, ref as storageRef,
+           uploadBytesResumable,
+           getDownloadURL }                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+  // ─── FIREBASE CONFIG ─────────────────────────────────────────────
+  const firebaseConfig = {
+    apiKey:            "AIzaSyCC2DYvR3U3iJS6-MYxINLt1OE2AaEQ95M",
+    authDomain:        "scain-1.firebaseapp.com",
+    projectId:         "scain-1",
+    storageBucket:     "scain-1.firebasestorage.app",
+    messagingSenderId: "1067933311345",
+    appId:             "1:1067933311345:web:04d099d087f23128c696d0"
+  };
+
+  // ─── INITIALISATION ──────────────────────────────────────────────
+  const app     = initializeApp(firebaseConfig);
+  const auth    = getAuth(app);
+  const db      = getFirestore(app);
+  const storage = getStorage(app);
+  const googleProvider = new GoogleAuthProvider();
+
+  // ─── ADMIN EMAIL ─────────────────────────────────────────────────
+  const ADMIN_EMAIL = "scizabalola@gmail.com";
+
+  // ─── STATE ───────────────────────────────────────────────────────
+  let currentUser  = null;
+  let allDocs      = [];
+  let selectedFile = null;
+
+  // ─── HELPER: TOAST ───────────────────────────────────────────────
+  window.showToast = function(msg, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    const icon = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info';
+    el.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 3700);
+  };
+
+  // ─── HELPER: INITIALES ───────────────────────────────────────────
+  function getInitials(nameOrEmail) {
+    if (!nameOrEmail) return '?';
+    const parts = nameOrEmail.split(/[\s@]/);
+    return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || '?';
+  }
+
+  // ─── HELPER: ICÔNE TYPE DOC ──────────────────────────────────────
+  function typeIcon(type) {
+    if (type === 'PDF')   return { icon: '<i class="fa-solid fa-file-pdf"></i>', cls: 'pdf' };
+    if (type === 'Image') return { icon: '<i class="fa-solid fa-image"></i>', cls: 'img' };
+    return { icon: '<i class="fa-solid fa-link"></i>', cls: 'link' };
+  }
+
+  // ─── HELPER: ICÔNE PROMO ─────────────────────────────────────────
+  function promoIcon(promo) {
+    const map = {
+      'Bac1': '<i class="fa-solid fa-1"></i>',
+      'Bac2': '<i class="fa-solid fa-2"></i>',
+      'Bac3': '<i class="fa-solid fa-3"></i>',
+      'M1':   '<i class="fa-solid fa-m"></i>',
+      'M2':   '<i class="fa-solid fa-graduation-cap"></i>',
+    };
+    return map[promo] || '<i class="fa-solid fa-graduation-cap"></i>';
+  }
+
+  // ─── HELPER: DATE ────────────────────────────────────────────────
+  function fmtDate(ts) {
+    if (!ts) return '—';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+  }
+
+  // ─── HELPER: HEURE CHAT ──────────────────────────────────────────
+  function fmtTime(ts) {
+    if (!ts) return '';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  // ─── HELPER: ESCAPE HTML ─────────────────────────────────────────
+  function escHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // =========================================================
+  //  AUTH STATE LISTENER
+  // =========================================================
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+
+    document.getElementById('btn-google-login').style.display = user ? 'none' : '';
+    document.getElementById('btn-logout').style.display       = user ? '' : 'none';
+    document.getElementById('user-display').style.display     = user ? 'flex' : 'none';
+    document.getElementById('btn-add-doc').style.display      = user ? '' : 'none';
+
+    if (user) {
+      closeModal('modal-auth');
+
+      // Avatar : photo Google ou initiales
+      const avatarEl = document.getElementById('user-avatar');
+      if (user.photoURL) {
+        avatarEl.innerHTML = `<img src="${user.photoURL}" alt="avatar" />`;
+      } else {
+        avatarEl.textContent = getInitials(user.displayName || user.email);
+      }
+      document.getElementById('user-email-short').textContent = user.displayName || user.email.split('@')[0];
+
+      document.getElementById('chat-input-wrap').style.display   = 'flex';
+      document.getElementById('chat-login-notice').style.display = 'none';
+    } else {
+      document.getElementById('chat-input-wrap').style.display   = 'none';
+      document.getElementById('chat-login-notice').style.display = '';
+    }
+
+    renderDocs();
+    hideSpinner();
+  });
+
+  // =========================================================
+  //  AUTH — GOOGLE UNIQUEMENT
+  // =========================================================
+
+  /** Connexion via Google Popup */
+  window.loginWithGoogle = async function() {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      showToast('Connexion réussie ! Bienvenue 🎉', 'success');
+    } catch(e) {
+      if (e.code !== 'auth/popup-closed-by-user') {
+        showToast('Erreur de connexion : ' + e.message, 'error');
+      }
+    }
+  };
+
+  /** Déconnexion */
+  window.logout = async function() {
+    await signOut(auth);
+    showToast('Déconnexion effectuée.', 'info');
+  };
+
+  // =========================================================
+  //  DOCUMENTS — FIRESTORE REALTIME
+  // =========================================================
+  const docsCol   = collection(db, 'documents');
+  const docsQuery = query(docsCol, orderBy('createdAt', 'desc'));
+
+  onSnapshot(docsQuery, snap => {
+    allDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    document.getElementById('stat-docs').textContent = allDocs.length;
+    filterDocs();
+  });
+
+  // ─── FILTRAGE & RECHERCHE ────────────────────────────────────────
+  window.filterDocs = function() {
+    const q     = (document.getElementById('search-input').value || '').toLowerCase();
+    const dept  = document.getElementById('filter-dept').value;
+    const promo = document.getElementById('filter-promo').value;
+    const type  = document.getElementById('filter-type').value;
+
+    const filtered = allDocs.filter(d => {
+      const matchQ     = !q     || (d.title||'').toLowerCase().includes(q) || (d.desc||'').toLowerCase().includes(q);
+      const matchDept  = !dept  || d.dept  === dept;
+      const matchPromo = !promo || d.promo === promo;
+      const matchType  = !type  || d.type  === type;
+      return matchQ && matchDept && matchPromo && matchType;
+    });
+
+    document.getElementById('doc-count-label').textContent =
+      filtered.length < allDocs.length ? `(${filtered.length} sur ${allDocs.length})` : `(${allDocs.length})`;
+    renderDocs(filtered);
+  };
+
+  /** Rendu des cartes de documents */
+  function renderDocs(docs) {
+    const data    = docs || allDocs;
+    const grid    = document.getElementById('docs-grid');
+    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+
+    if (!data.length) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-file-circle-question"></i>
+          <p>Aucun document trouvé. Soyez le premier à publier !</p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = data.map(d => {
+      const { icon, cls } = typeIcon(d.type);
+
+      // Bouton supprimer : admin sur tout, sinon uniquement ses propres docs
+      const isOwner = currentUser && d.authorUid === currentUser.uid;
+      const canDelete = isAdmin || isOwner;
+      const delBtn = canDelete
+        ? `<button class="action-btn danger" title="Supprimer" onclick="deleteDocument('${d.id}')">
+             <i class="fa-solid fa-trash"></i>
+           </button>`
+        : '';
+
+      return `
+        <div class="doc-card">
+          <div class="doc-card-header">
+            <div class="doc-icon ${cls}">${icon}</div>
+            <span class="doc-type-badge">${d.type || 'DOC'}</span>
+          </div>
+          <h3>${escHtml(d.title)}</h3>
+          <p>${escHtml(d.desc || 'Aucune description disponible.')}</p>
+          <div class="doc-meta">
+            <span class="meta-chip dept"><i class="fa-solid fa-building-columns"></i> ${escHtml(d.dept || '—')}</span>
+            <span class="meta-chip promo">${promoIcon(d.promo)} ${escHtml(d.promo || '—')}</span>
+            <span class="meta-chip"><i class="fa-regular fa-calendar"></i> ${fmtDate(d.createdAt)}</span>
+          </div>
+          <div class="doc-footer">
+            <span class="doc-views"><i class="fa-regular fa-eye"></i> ${d.vues || 0} vue${(d.vues||0) > 1 ? 's' : ''}</span>
+            <div class="doc-actions">
+              ${delBtn}
+              <button class="action-btn open" onclick="openDoc('${d.id}')">
+                <i class="fa-solid fa-up-right-from-square"></i> Ouvrir
+              </button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ─── SUPPRESSION DOCUMENT ────────────────────────────────────────
+  window.deleteDocument = async function(id) {
+    const docData = allDocs.find(d => d.id === id);
+    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+    const isOwner = currentUser && docData && docData.authorUid === currentUser.uid;
+
+    if (!isAdmin && !isOwner) {
+      showToast('Accès refusé.', 'error'); return;
+    }
+    if (!confirm('Confirmer la suppression de ce document ?')) return;
+    try {
+      await deleteDoc(doc(db, 'documents', id));
+      showToast('Document supprimé.', 'success');
+    } catch(e) {
+      showToast('Erreur lors de la suppression.', 'error');
+    }
+  };
+
+  // ─── OUVERTURE D'UN DOCUMENT ─────────────────────────────────────
+  window.openDoc = async function(id) {
+    const docData = allDocs.find(d => d.id === id);
+    if (!docData) return;
+
+    try { await updateDoc(doc(db, 'documents', id), { vues: increment(1) }); } catch(e) {}
+
+    document.getElementById('viewer-title').textContent = docData.title || 'Document';
+    document.getElementById('viewer-meta').textContent  = `${docData.dept || ''} · ${docData.promo || ''} · ${fmtDate(docData.createdAt)}`;
+
+    const wrap = document.getElementById('viewer-frame-wrap');
+    const url  = docData.url || '';
+    document.getElementById('viewer-download').href = url;
+
+    if (docData.type === 'PDF') {
+      wrap.innerHTML = `<iframe src="${url}" style="height:65vh;"></iframe>`;
+    } else if (docData.type === 'Image') {
+      wrap.innerHTML = `<img src="${url}" alt="${escHtml(docData.title)}" style="max-height:65vh;width:100%;object-fit:contain;" />`;
+    } else {
+      wrap.innerHTML = `<div style="padding:30px;text-align:center;color:var(--text-mid);">
+        <i class="fa-solid fa-link" style="font-size:2rem;opacity:0.4;margin-bottom:14px;display:block;"></i>
+        <p style="margin-bottom:16px;">Ce document est disponible via un lien externe.</p>
+        <a href="${url}" target="_blank" rel="noopener" style="color:var(--accent);">${escHtml(url)}</a></div>`;
+    }
+    openModal('modal-viewer');
+  };
+
+  // ─── PUBLICATION DOCUMENT ────────────────────────────────────────
+  window.publishDocument = async function() {
+    if (!currentUser) { showToast('Connectez-vous pour publier.', 'error'); return; }
+
+    const title = document.getElementById('doc-title').value.trim();
+    const desc  = document.getElementById('doc-desc').value.trim();
+    const dept  = document.getElementById('doc-dept').value;
+    const promo = document.getElementById('doc-promo').value;
+    const type  = document.getElementById('doc-type').value;
+
+    if (!title || !dept || !promo || !type) {
+      showToast('Remplissez les champs obligatoires (*).', 'error'); return;
+    }
+
+    const btn = document.getElementById('publish-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publication…';
+
+    try {
+      let url = document.getElementById('doc-url').value.trim();
+
+      if (selectedFile && (type === 'PDF' || type === 'Image')) {
+        url = await uploadFile(selectedFile, type);
+      }
+
+      if (!url) {
+        showToast('Veuillez fournir un fichier ou une URL.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publier le document';
+        return;
+      }
+
+      await addDoc(collection(db, 'documents'), {
+        title, desc, dept, promo, type, url,
+        vues: 0,
+        authorUid:   currentUser.uid,
+        authorEmail: currentUser.email,
+        authorName:  currentUser.displayName || currentUser.email,
+        createdAt:   serverTimestamp()
+      });
+
+      showToast('Document publié avec succès ! 🎉', 'success');
+      closeModal('modal-add-doc');
+      resetAddDocForm();
+    } catch(e) {
+      showToast('Erreur lors de la publication : ' + e.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publier le document';
+    }
+  };
+
+  /** Upload Firebase Storage */
+  function uploadFile(file, type) {
+    return new Promise((resolve, reject) => {
+      const ext  = file.name.split('.').pop();
+      const path = `documents/${type}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+      const ref  = storageRef(storage, path);
+      const task = uploadBytesResumable(ref, file);
+      document.getElementById('upload-progress').style.display = '';
+      task.on('state_changed',
+        snap => {
+          const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+          document.getElementById('progress-fill').style.width = pct + '%';
+          document.getElementById('upload-status').textContent = `Envoi… ${pct}%`;
+        },
+        err => reject(err),
+        async () => {
+          const dlUrl = await getDownloadURL(task.snapshot.ref);
+          document.getElementById('upload-status').textContent = 'Envoi terminé ✓';
+          resolve(dlUrl);
+        }
+      );
+    });
+  }
+
+  function resetAddDocForm() {
+    ['doc-title','doc-desc','doc-url'].forEach(id => document.getElementById(id).value = '');
+    ['doc-dept','doc-promo','doc-type'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('file-name-display').textContent = '';
+    document.getElementById('upload-progress').style.display = 'none';
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('url-input-group').style.display  = 'none';
+    document.getElementById('file-input-group').style.display = 'none';
+    selectedFile = null;
+  }
+
+  window.toggleDocInput = function() {
+    const type = document.getElementById('doc-type').value;
+    document.getElementById('url-input-group').style.display  = (type === 'Lien') ? '' : 'none';
+    document.getElementById('file-input-group').style.display = (type === 'PDF' || type === 'Image') ? '' : 'none';
+  };
+
+  window.handleFileSelect = function(event) {
+    selectedFile = event.target.files[0];
+    if (selectedFile) document.getElementById('file-name-display').textContent = selectedFile.name;
+  };
+
+  window.handleFileDrop = function(event) {
+    event.preventDefault();
+    document.getElementById('upload-area').classList.remove('dragover');
+    selectedFile = event.dataTransfer.files[0];
+    if (selectedFile) document.getElementById('file-name-display').textContent = selectedFile.name;
+  };
+
+  // =========================================================
+  //  CHAT — FIRESTORE REALTIME
+  // =========================================================
+  const chatCol   = collection(db, 'chat');
+  const chatQuery = query(chatCol, orderBy('sentAt', 'asc'));
+
+  onSnapshot(chatQuery, snap => {
+    const container = document.getElementById('chat-messages');
+    container.innerHTML = '';
+
+    const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    document.getElementById('stat-msgs').textContent = msgs.length;
+
+    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+
+    msgs.forEach(msg => {
+      const isOwn   = currentUser && msg.uid === currentUser.uid;
+      const canDel  = isAdmin || isOwn;
+      const initials = getInitials(msg.name || msg.email || '?');
+
+      const el = document.createElement('div');
+      el.className = `chat-msg${isOwn ? ' own' : ''}`;
+
+      // Avatar : photo ou initiales
+      const avatarHtml = msg.photoURL
+        ? `<div class="avatar"><img src="${msg.photoURL}" alt="avatar" /></div>`
+        : `<div class="avatar">${initials}</div>`;
+
+      const delBtn = canDel
+        ? `<button class="msg-del-btn" title="Supprimer ce message" onclick="deleteMessage('${msg.id}')">
+             <i class="fa-solid fa-trash"></i>
+           </button>`
+        : '';
+
+      el.innerHTML = `
+        ${avatarHtml}
+        <div>
+          <div class="msg-bubble">
+            <div class="msg-sender">${escHtml(msg.name || msg.email || 'Anonyme')} ${delBtn}</div>
+            ${escHtml(msg.text)}
+            <div class="msg-time">${fmtTime(msg.sentAt)}</div>
+          </div>
+        </div>`;
+      container.appendChild(el);
+    });
+
+    container.scrollTop = container.scrollHeight;
+  });
+
+  /** Envoyer un message */
+  window.sendMessage = async function() {
+    if (!currentUser) { showToast('Connectez-vous pour participer.', 'error'); return; }
+    const input = document.getElementById('chat-input');
+    const text  = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    try {
+      await addDoc(collection(db, 'chat'), {
+        text,
+        uid:      currentUser.uid,
+        email:    currentUser.email,
+        name:     currentUser.displayName || currentUser.email.split('@')[0],
+        photoURL: currentUser.photoURL || null,
+        sentAt:   serverTimestamp()
+      });
+    } catch(e) {
+      showToast('Erreur envoi message.', 'error');
+    }
+  };
+
+  /** Supprimer un message du chat */
+  window.deleteMessage = async function(id) {
+    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+    if (!currentUser) { showToast('Accès refusé.', 'error'); return; }
+    if (!confirm('Supprimer ce message ?')) return;
+    try {
+      await deleteDoc(doc(db, 'chat', id));
+      showToast('Message supprimé.', 'success');
+    } catch(e) {
+      showToast('Erreur lors de la suppression.', 'error');
+    }
+  };
+
+  // =========================================================
+  //  UI HELPERS
+  // =========================================================
+  window.showPanel = function(panel) {
+    ['docs','chat'].forEach(p => {
+      document.getElementById(`panel-${p}`).classList.toggle('active', p === panel);
+      document.getElementById(`tab-${p}`).classList.toggle('active', p === panel);
+    });
+  };
+
+  window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
+  window.closeModal = function(id) {
+    document.getElementById(id).classList.remove('open');
+    if (id === 'modal-viewer') document.getElementById('viewer-frame-wrap').innerHTML = '';
+  };
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+  });
+
+  window.openAddDoc = function() {
+    if (!currentUser) { showToast('Connectez-vous pour publier.', 'error'); return; }
+    resetAddDocForm();
+    openModal('modal-add-doc');
+  };
+
+  function hideSpinner() {
+    const s = document.getElementById('global-spinner');
+    s.classList.add('hidden');
+    setTimeout(() => s.style.display = 'none', 450);
+  }
+
+  // Fallback spinner
+  setTimeout(hideSpinner, 4000);
+
+  // Panneau initial
+  showPanel('docs');
+
+</script>
+</body>
+</html>
