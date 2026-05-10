@@ -1176,7 +1176,7 @@
     } catch(e) { showToast('Erreur suppression.', 'error'); }
   };
 
-  // ─── UI HELPERS ───────────────────────────────────────────────────
+  // ─── UI HELPERS . ───────────────────────────────────────────────────
   window.showPanel = function(panel) {
     ['docs','chat'].forEach(p => {
       document.getElementById(`panel-${p}`).classList.toggle('active', p === panel);
