@@ -1,1285 +1,2008 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SCAIn-1 — ISP Bukavu · Plateforme Éducative</title>
-  <meta name="description" content="La plateforme officielle des étudiants de l'ISP Bukavu." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuxParfum — Marketplace de Parfums & Huiles | Bukavu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ─── THEME VARIABLES ─── */
 :root {
-  --ink:         #060910;
-  --ink-2:       #0d1220;
-  --ink-3:       #161e30;
-  --surface:     rgba(255,255,255,0.04);
-  --surface-2:   rgba(255,255,255,0.07);
-  --surface-3:   rgba(255,255,255,0.10);
-  --border:      rgba(255,255,255,0.07);
-  --gold:        #f6b73c;
-  --gold-dim:    rgba(246,183,60,0.15);
-  --gold-glow:   rgba(246,183,60,0.08);
-  --teal:        #2dd4bf;
-  --teal-dim:    rgba(45,212,191,0.12);
-  --rose:        #fb7185;
-  --rose-dim:    rgba(251,113,133,0.12);
-  --sky:         #38bdf8;
-  --sky-dim:     rgba(56,189,248,0.12);
-  --success:     #4ade80;
-  --success-dim: rgba(74,222,128,0.12);
-  --wp-out:      #005c4b;
-  --wp-out-light:#dcf8c6;
-  --text-1:      #f0f4ff;
-  --text-2:      #94a3b8;
-  --text-3:      #475569;
-  --radius-sm:   8px;
-  --radius:      14px;
-  --radius-lg:   22px;
-  --radius-xl:   32px;
-  --blur:        blur(24px);
-  --shadow:      0 12px 48px rgba(0,0,0,0.7);
-  --trans:       0.2s cubic-bezier(.4,0,.2,1);
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dark: #8b6914;
+  --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0806;
+  --bg-soft: #140f08;
+  --bg-card: rgba(20,15,8,0.92);
+  --cream: #f5efe6;
+  --cream-dark: #e8ddd0;
+  --text-main: #f5efe6;
+  --text-muted: #9c8a72;
+  --text-light: #6b5c45;
+  --glass: rgba(255,255,255,0.06);
+  --glass-border: rgba(201,168,76,0.2);
+  --shadow-gold: 0 8px 40px rgba(201,168,76,0.18);
+  --shadow-dark: 0 20px 60px rgba(0,0,0,0.5);
+  --nav-bg: rgba(10,8,6,0.94);
+  --modal-bg: #140f08;
+  --dropdown-bg: #1a1208;
+  --overlay-slide: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.1) 75%, transparent 100%);
+  --placeholder-bg: linear-gradient(135deg, #1a1208, #2a1f10);
+  --theme-icon-sun: block;
+  --theme-icon-moon: none;
+}
+
+[data-theme="light"] {
+  --bg: #faf7f2;
+  --bg-soft: #f0ebe0;
+  --bg-card: rgba(255,252,245,0.97);
+  --cream: #1a1208;
+  --cream-dark: #3a2f1a;
+  --text-main: #1a1208;
+  --text-muted: #6b5c45;
+  --text-light: #9c8a72;
+  --glass: rgba(0,0,0,0.04);
+  --glass-border: rgba(139,105,20,0.18);
+  --shadow-gold: 0 8px 40px rgba(201,168,76,0.22);
+  --shadow-dark: 0 20px 60px rgba(0,0,0,0.12);
+  --nav-bg: rgba(250,247,242,0.96);
+  --modal-bg: #fff;
+  --dropdown-bg: #fff;
+  --overlay-slide: linear-gradient(to top, rgba(15,10,5,0.88) 0%, rgba(15,10,5,0.48) 45%, rgba(15,10,5,0.08) 75%, transparent 100%);
+  --placeholder-bg: linear-gradient(135deg, #ede8de, #ddd5c5);
+  --theme-icon-sun: none;
+  --theme-icon-moon: block;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--ink); color: var(--text-1); min-height: 100vh; overflow-x: hidden; }
+html { scroll-behavior: smooth; }
 
-.bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(ellipse 100% 60% at 10% -10%, rgba(246,183,60,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 80% 60% at 90% 100%, rgba(45,212,191,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 70% 20%, rgba(251,113,133,0.04) 0%, transparent 50%); }
-.bg-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%); }
-
-/* SPINNER */
-#global-spinner { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; background: var(--ink); transition: opacity 0.5s; }
-#global-spinner.hidden { opacity: 0; pointer-events: none; }
-.spinner-logo { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: var(--gold); letter-spacing: -1px; }
-.spinner-logo em { font-style: italic; color: var(--text-2); font-size: 1.8rem; }
-.spinner-subtitle { font-size: 0.78rem; color: var(--text-3); letter-spacing: 2px; text-transform: uppercase; margin-top: -10px; }
-.spinner-ring { width: 44px; height: 44px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.9s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* TOAST */
-#toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 8888; display: flex; flex-direction: column; gap: 10px; }
-.toast { padding: 12px 20px; border-radius: var(--radius); font-size: 0.85rem; font-weight: 500; backdrop-filter: var(--blur); animation: toastIn 0.35s cubic-bezier(.34,1.56,.64,1), toastOut 0.4s ease 3.2s forwards; max-width: 320px; display: flex; align-items: center; gap: 10px; }
-.toast.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: var(--success); }
-.toast.error   { background: rgba(251,113,133,0.1); border: 1px solid rgba(251,113,133,0.3); color: var(--rose); }
-.toast.info    { background: rgba(246,183,60,0.1);  border: 1px solid rgba(246,183,60,0.3);  color: var(--gold); }
-@keyframes toastIn  { from { transform: translateX(120%) scale(.9); opacity:0; } to { transform: none; opacity:1; } }
-@keyframes toastOut { to   { transform: translateX(120%) scale(.9); opacity:0; } }
-
-/* HEADER */
-header { position: sticky; top: 0; z-index: 500; background: rgba(6,9,16,0.85); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); border-bottom: 1px solid var(--border); }
-.nav-inner { max-width: 1340px; margin: 0 auto; padding: 0 28px; height: 68px; display: flex; align-items: center; gap: 16px; }
-.logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; margin-right: auto; }
-.logo-badge { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; background: linear-gradient(135deg, rgba(246,183,60,0.2), rgba(246,183,60,0.05)); border: 1px solid rgba(246,183,60,0.3); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--gold); overflow: hidden; }
-.logo-badge img { width: 100%; height: 100%; object-fit: cover; border-radius: 11px; }
-.logo-name { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--text-1); }
-.logo-name em { font-style: italic; color: var(--gold); }
-.logo-tagline { font-size: 0.65rem; color: var(--text-3); letter-spacing: 0.6px; text-transform: uppercase; font-weight: 500; }
-.nav-links { display: flex; gap: 2px; align-items: center; }
-.nav-link { background: none; border: none; cursor: pointer; color: var(--text-2); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.875rem; font-weight: 500; padding: 8px 14px; border-radius: var(--radius-sm); transition: var(--trans); display: flex; align-items: center; gap: 7px; }
-.nav-link:hover { color: var(--text-1); background: var(--surface-2); }
-.nav-link.active { color: var(--gold); }
-.nav-divider { width: 1px; height: 24px; background: var(--border); margin: 0 6px; }
-#user-pill { display: flex; align-items: center; gap: 10px; padding: 5px 12px 5px 5px; border-radius: 100px; background: var(--surface); border: 1px solid var(--border); }
-.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--teal)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; color: var(--ink); flex-shrink: 0; overflow: hidden; }
-.avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-#user-name { font-size: 0.82rem; color: var(--text-2); font-weight: 500; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.admin-badge { font-size: 0.65rem; background: linear-gradient(135deg, var(--gold), #f59e0b); color: var(--ink); padding: 2px 8px; border-radius: 100px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 6px; font-family: 'JetBrains Mono', monospace; }
-.btn { display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; border-radius: var(--radius-sm); transition: var(--trans); text-decoration: none; white-space: nowrap; }
-.btn-sm { font-size: 0.8rem; padding: 7px 14px; }
-.btn-md { font-size: 0.875rem; padding: 9px 18px; }
-.btn-gold { background: linear-gradient(135deg, #f6b73c, #f59e0b); color: var(--ink); box-shadow: 0 4px 18px rgba(246,183,60,0.25); }
-.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(246,183,60,0.35); }
-.btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text-2); }
-.btn-ghost:hover { border-color: rgba(246,183,60,0.3); color: var(--text-1); background: var(--gold-glow); }
-.btn-danger { background: var(--rose-dim); border: 1px solid rgba(251,113,133,0.25); color: var(--rose); }
-.btn-danger:hover { background: rgba(251,113,133,0.2); border-color: var(--rose); }
-.btn-google { display: flex; align-items: center; gap: 9px; background: #fff; border: none; color: #1f1f1f; padding: 9px 18px; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.875rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; transition: var(--trans); box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
-.btn-google:hover { background: #f0f0f0; transform: translateY(-1px); }
-.btn-google img { width: 18px; height: 18px; }
-
-/* MAIN */
-main { position: relative; z-index: 1; max-width: 1340px; margin: 0 auto; padding: 48px 28px 100px; }
-
-/* HERO */
-.hero { padding: 56px 0 48px; }
-.hero-inner { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
-.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--gold-dim); border: 1px solid rgba(246,183,60,0.25); border-radius: 100px; padding: 5px 14px; font-size: 0.75rem; color: var(--gold); font-family: 'JetBrains Mono', monospace; margin-bottom: 20px; letter-spacing: 0.5px; }
-.hero-eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { opacity:1; transform: scale(1); } 50% { opacity:.5; transform: scale(.8); } }
-.hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.1; margin-bottom: 16px; }
-.hero h1 .accent { color: var(--gold); font-style: italic; }
-.hero-desc { font-size: 1.05rem; color: var(--text-2); line-height: 1.75; margin-bottom: 32px; max-width: 520px; }
-.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-.connect-banner { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; background: linear-gradient(135deg, rgba(246,183,60,0.08), rgba(246,183,60,0.03)); border: 1px solid rgba(246,183,60,0.2); border-radius: var(--radius-lg); padding: 16px 22px; margin-top: 24px; width: fit-content; }
-.connect-banner-text { font-size: 0.875rem; color: var(--text-2); line-height: 1.4; }
-.connect-banner-text strong { color: var(--text-1); display: block; margin-bottom: 2px; }
-.btn-google-hero { display: flex; align-items: center; gap: 10px; background: #fff; border: none; border-radius: var(--radius-sm); color: #1f1f1f; padding: 11px 22px; cursor: pointer; flex-shrink: 0; font-size: 0.9rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; transition: var(--trans); box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 0 0 3px rgba(246,183,60,0.2); }
-.btn-google-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 0 4px rgba(246,183,60,0.3); }
-.btn-google-hero img { width: 20px; height: 20px; }
-.hero-stats-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; min-width: 200px; flex-shrink: 0; backdrop-filter: blur(16px); }
-.stat-row { display: flex; align-items: center; gap: 14px; }
-.stat-icon { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-.stat-icon.gold { background: var(--gold-dim); color: var(--gold); }
-.stat-icon.teal { background: var(--teal-dim); color: var(--teal); }
-.stat-icon.sky  { background: var(--sky-dim);  color: var(--sky); }
-.stat-num { font-family: 'DM Serif Display', serif; font-size: 1.6rem; line-height: 1; color: var(--text-1); display: block; }
-.stat-lbl { font-size: 0.73rem; color: var(--text-3); letter-spacing: 0.4px; display: block; margin-top: 1px; }
-
-/* FEATURE STRIP */
-.feature-strip { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
-.feature-chip { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 100px; background: var(--surface); border: 1px solid var(--border); font-size: 0.8rem; color: var(--text-2); font-weight: 500; }
-.feature-chip i { font-size: 0.75rem; }
-.feature-chip.gold { border-color: rgba(246,183,60,0.2); color: var(--gold); background: var(--gold-glow); }
-.feature-chip.teal { border-color: rgba(45,212,191,0.2); color: var(--teal); background: var(--teal-dim); }
-.feature-chip.sky  { border-color: rgba(56,189,248,0.2); color: var(--sky);  background: var(--sky-dim); }
-
-/* TABS */
-.tab-bar { display: flex; gap: 6px; margin-bottom: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 5px; width: fit-content; backdrop-filter: blur(12px); }
-.tab-btn { padding: 9px 22px; border-radius: 10px; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.875rem; font-weight: 600; color: var(--text-2); background: none; transition: var(--trans); display: flex; align-items: center; gap: 8px; }
-.tab-btn.active { background: linear-gradient(135deg, #f6b73c, #f59e0b); color: var(--ink); box-shadow: 0 4px 18px rgba(246,183,60,0.3); }
-.tab-btn:hover:not(.active) { color: var(--text-1); background: var(--surface-2); }
-.tab-count { font-size: 0.7rem; background: rgba(255,255,255,0.12); border-radius: 100px; padding: 1px 7px; font-family: 'JetBrains Mono', monospace; }
-.tab-btn.active .tab-count { background: rgba(0,0,0,0.2); }
-
-/* PANELS */
-#panel-docs, #panel-chat { display: none; }
-#panel-docs.active, #panel-chat.active { display: block; animation: fadeUp 0.3s ease; }
-@keyframes fadeUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: none; } }
-
-/* SEARCH & FILTERS */
-.search-filter-row { display: flex; gap: 12px; margin-bottom: 12px; align-items: stretch; flex-wrap: wrap; }
-.search-wrap { position: relative; flex: 1; min-width: 220px; }
-.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 0.85rem; pointer-events: none; }
-#search-input { width: 100%; padding: 12px 16px 12px 44px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-1); font-size: 0.9rem; outline: none; font-family: 'Plus Jakarta Sans', sans-serif; transition: var(--trans); }
-#search-input::placeholder { color: var(--text-3); }
-#search-input:focus { border-color: rgba(246,183,60,0.4); background: var(--gold-glow); box-shadow: 0 0 0 3px rgba(246,183,60,0.07); }
-.filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
-.filter-select { padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-2); font-size: 0.855rem; cursor: pointer; transition: var(--trans); outline: none; font-family: 'Plus Jakarta Sans', sans-serif; appearance: none; padding-right: 32px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
-.filter-select:focus, .filter-select:hover { border-color: rgba(246,183,60,0.3); color: var(--text-1); }
-select option { background: #111827; }
-.panel-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-.panel-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--text-1); }
-.panel-title span { color: var(--gold); font-style: italic; }
-.doc-count-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 3px 10px; }
-
-/* ── LIBRARY CARDS (Facebook-style) ── */
-.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 20px; }
-.lib-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: var(--trans); backdrop-filter: blur(16px); position: relative; }
-.lib-card:hover { border-color: rgba(246,183,60,0.25); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.5); }
-.lib-card-media { width: 100%; height: 180px; object-fit: cover; display: block; background: var(--ink-3); }
-.lib-card-media-icon { height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg, var(--ink-2), var(--ink-3)); }
-.lib-card-media-icon i { font-size: 3rem; }
-.lib-card-media-icon.pdf i { color: var(--rose); }
-.lib-card-media-icon.docx i { color: var(--sky); }
-.lib-card-media-icon.link i { color: var(--gold); }
-.lib-card-media-icon span { font-size: 0.72rem; color: var(--text-3); letter-spacing: 1px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
-.lib-card-body { padding: 16px 18px; }
-.lib-card-title { font-weight: 700; font-size: 0.95rem; color: var(--text-1); margin-bottom: 6px; line-height: 1.4; }
-.lib-card-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.lib-card-promo { font-size: 0.7rem; background: var(--teal-dim); border: 1px solid rgba(45,212,191,0.2); color: var(--teal); padding: 2px 8px; border-radius: 100px; font-weight: 600; }
-.lib-card-date { font-size: 0.7rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
-.lib-card-author { font-size: 0.72rem; color: var(--text-3); margin-bottom: 14px; display: flex; align-items: center; gap: 5px; }
-.lib-card-author i { color: var(--gold); }
-
-/* FB-style action bar */
-.lib-card-actions { display: flex; border-top: 1px solid var(--border); }
-.lib-action-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 6px; background: none; border: none; cursor: pointer; color: var(--text-2); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.72rem; font-weight: 600; transition: var(--trans); border-right: 1px solid var(--border); }
-.lib-action-btn:last-child { border-right: none; }
-.lib-action-btn i { font-size: 1rem; }
-.lib-action-btn:hover { background: var(--surface-2); color: var(--text-1); }
-.lib-action-btn.liked { color: var(--rose); }
-.lib-action-btn.liked i { animation: heartPop 0.3s cubic-bezier(.34,1.56,.64,1); }
-@keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
-.lib-action-btn .like-count { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; }
-.lib-admin-del { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 8px; background: rgba(251,113,133,0.15); border: 1px solid rgba(251,113,133,0.3); color: var(--rose); cursor: pointer; font-size: 0.78rem; display: flex; align-items: center; justify-content: center; transition: var(--trans); }
-.lib-admin-del:hover { background: rgba(251,113,133,0.25); }
-
-/* EMPTY STATE */
-.empty-state { text-align: center; padding: 80px 20px; color: var(--text-3); grid-column: 1/-1; }
-.empty-state .empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.2; display: block; }
-.empty-state p { font-size: 0.9rem; }
-.empty-state .hint { font-size: 0.8rem; margin-top: 8px; opacity: 0.6; }
-
-/* ══════════════════════════════════════════
-   CHAT — WhatsApp Style
-══════════════════════════════════════════ */
-.chat-layout { display: grid; grid-template-columns: 1fr 290px; gap: 20px; align-items: start; }
-
-/* Chat main */
-.chat-main-wrap { background: #0b141a; border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column; height: calc(100vh - 260px); min-height: 520px; }
-.chat-top { padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; gap: 12px; background: #1f2c34; flex-shrink: 0; }
-.chat-group-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--ink); flex-shrink: 0; }
-.chat-top-info h3 { font-size: 1rem; font-weight: 700; color: var(--text-1); }
-.chat-top-info p  { font-size: 0.72rem; color: #8696a0; margin-top: 1px; }
-.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: livePulse 2.5s ease-in-out infinite; margin-left: auto; flex-shrink: 0; }
-@keyframes livePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 50% { box-shadow: 0 0 0 6px rgba(74,222,128,0); } }
-
-/* Messages area */
-.chat-messages {
-  flex: 1; overflow-y: auto; padding: 16px 18px;
-  display: flex; flex-direction: column; gap: 4px;
-  background: #0b141a;
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20 Q30 10 40 20 Q50 30 60 20 Q70 10 80 20' stroke='rgba(255,255,255,0.015)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
-}
-.chat-messages::-webkit-scrollbar { width: 4px; }
-.chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-
-.chat-date-divider { text-align: center; margin: 10px 0; }
-.chat-date-divider span { font-size: 0.72rem; background: #1f2c34; color: #8696a0; padding: 4px 14px; border-radius: 100px; font-family: 'JetBrains Mono', monospace; }
-
-/* Individual message */
-.chat-msg { display: flex; align-items: flex-end; gap: 8px; max-width: 75%; animation: msgIn 0.2s ease; }
-@keyframes msgIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: none; } }
-.chat-msg.own { align-self: flex-end; flex-direction: row-reverse; }
-.chat-msg.other { align-self: flex-start; }
-
-.msg-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: var(--ink); flex-shrink: 0; overflow: hidden; }
-.msg-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-
-.msg-bubble {
-  padding: 8px 12px 6px;
-  border-radius: 8px;
-  font-size: 0.875rem; line-height: 1.55; position: relative;
-  max-width: 100%;
-  word-break: break-word;
-}
-.chat-msg.other .msg-bubble {
-  background: #1f2c34; color: var(--text-1);
-  border-radius: 0 8px 8px 8px;
-}
-.chat-msg.own .msg-bubble {
-  background: #005c4b; color: #e9edef;
-  border-radius: 8px 0 8px 8px;
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
-.msg-sender-name { font-size: 0.72rem; font-weight: 700; color: var(--gold); margin-bottom: 3px; display: block; }
-.msg-text { display: block; }
-.msg-footer { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 3px; }
-.msg-time { font-size: 0.62rem; color: #8696a0; font-family: 'JetBrains Mono', monospace; }
-.msg-ticks { font-size: 0.72rem; color: #8696a0; }
-.msg-ticks.read { color: #53bdeb; }
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139,105,20,0.05) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z' fill='none' stroke='rgba(201,168,76,0.025)' stroke-width='1'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
 
-/* Reply preview inside bubble */
-.reply-preview { background: rgba(255,255,255,0.07); border-left: 3px solid var(--gold); border-radius: 4px; padding: 5px 9px; margin-bottom: 7px; font-size: 0.75rem; color: #8696a0; overflow: hidden; }
-.reply-preview .reply-name { color: var(--gold); font-weight: 700; margin-bottom: 2px; }
-.reply-preview .reply-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; }
+/* ─── NAVBAR ─── */
+nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 16px;
+  height: 64px;
+  transition: background 0.4s ease;
+}
 
-/* Message action row (reply/delete on hover) */
-.msg-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; align-self: center; }
-.chat-msg:hover .msg-actions { opacity: 1; }
-.msg-action-btn { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: #8696a0; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; transition: var(--trans); }
-.msg-action-btn:hover { background: rgba(255,255,255,0.18); color: var(--text-1); }
-.msg-action-btn.del-msg:hover { background: rgba(251,113,133,0.2); color: var(--rose); }
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 600; font-style: italic;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  text-decoration: none; margin-right: auto;
+  letter-spacing: 0.02em;
+}
 
-/* Ban button (admin only) */
-.ban-btn { background: rgba(251,113,133,0.1); border: 1px solid rgba(251,113,133,0.2); color: var(--rose); cursor: pointer; font-size: 0.6rem; font-weight: 700; border-radius: 100px; padding: 1px 7px; font-family: 'Plus Jakarta Sans', sans-serif; transition: var(--trans); }
-.ban-btn:hover { background: rgba(251,113,133,0.2); }
+.nav-search {
+  display: flex; align-items: center;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 30px; padding: 8px 16px; gap: 8px;
+  flex: 1; max-width: 320px;
+  transition: var(--transition);
+}
+.nav-search:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+.nav-search input {
+  background: none; border: none; outline: none;
+  color: var(--text-main); font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem; width: 100%;
+}
+.nav-search input::placeholder { color: var(--text-muted); }
 
-/* Reply bar (above input) */
-#reply-bar { display: none; flex-shrink: 0; background: #1f2c34; border-top: 1px solid rgba(255,255,255,0.06); padding: 8px 16px; flex-direction: row; align-items: center; gap: 10px; }
-#reply-bar.active { display: flex; }
-.reply-bar-content { flex: 1; border-left: 3px solid var(--gold); padding-left: 10px; overflow: hidden; }
-.reply-bar-name { font-size: 0.75rem; font-weight: 700; color: var(--gold); }
-.reply-bar-text { font-size: 0.75rem; color: #8696a0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
-.reply-bar-close { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.08); border: none; color: #8696a0; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.reply-bar-close:hover { color: var(--text-1); }
+.nav-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 30px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+  cursor: pointer; transition: var(--transition); border: none;
+  text-decoration: none;
+}
+.nav-btn-outline {
+  background: none; border: 1px solid var(--glass-border); color: var(--text-main);
+}
+.nav-btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.nav-btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a0806; font-weight: 600;
+}
+.nav-btn-gold:hover { transform: translateY(-1px); box-shadow: var(--shadow-gold); }
 
-/* Input area */
-.chat-input-area { flex-shrink: 0; padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.06); background: #1f2c34; display: flex; flex-direction: column; gap: 0; }
-.chat-input-row { display: flex; gap: 8px; align-items: center; }
-#chat-input { flex: 1; padding: 11px 16px; background: #2a3942; border: none; border-radius: 24px; color: var(--text-1); font-size: 0.875rem; outline: none; font-family: 'Plus Jakarta Sans', sans-serif; }
-#chat-input::placeholder { color: #8696a0; }
-.chat-send { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, #f6b73c, #f59e0b); color: var(--ink); border: none; cursor: pointer; font-size: 0.9rem; transition: var(--trans); display: flex; align-items: center; justify-content: center; }
-.chat-send:hover { transform: scale(1.08); box-shadow: 0 4px 16px rgba(246,183,60,0.4); }
-.chat-login-bar { padding: 14px; text-align: center; font-size: 0.83rem; color: var(--text-2); }
-.chat-login-bar a { color: var(--gold); cursor: pointer; font-weight: 600; text-decoration: none; }
+/* ─── DARK MODE TOGGLE ─── */
+.theme-toggle {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+  flex-shrink: 0;
+  color: var(--text-main);
+}
+.theme-toggle:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(201,168,76,0.1);
+  transform: rotate(15deg);
+}
+.theme-toggle svg { transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+.icon-sun { display: var(--theme-icon-sun, block); }
+.icon-moon { display: var(--theme-icon-moon, none); }
 
-/* ── SIDEBAR (Members list) ── */
-.chat-sidebar { display: flex; flex-direction: column; gap: 14px; }
-.sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; backdrop-filter: blur(12px); }
-.sidebar-card h4 { font-family: 'DM Serif Display', serif; font-size: 1rem; margin-bottom: 14px; color: var(--text-1); }
-.members-list { display: flex; flex-direction: column; gap: 8px; max-height: 340px; overflow-y: auto; }
-.members-list::-webkit-scrollbar { width: 3px; }
-.members-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-.member-item { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: var(--radius-sm); transition: var(--trans); }
-.member-item:hover { background: var(--surface-2); }
-.member-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: var(--ink); flex-shrink: 0; overflow: hidden; position: relative; }
-.member-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.member-online-dot { position: absolute; bottom: 0; right: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--success); border: 2px solid var(--ink-2); }
-.member-info { flex: 1; overflow: hidden; }
-.member-name { font-size: 0.82rem; font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.member-role { font-size: 0.68rem; color: var(--text-3); }
-.member-admin-tag { font-size: 0.6rem; background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(246,183,60,0.3); padding: 1px 6px; border-radius: 100px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+/* ─── USER / AUTH MENUS ─── */
+#user-menu-btn {
+  display: none; align-items: center; gap: 8px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 30px; padding: 6px 12px 6px 6px;
+  cursor: pointer; color: var(--text-main);
+  font-size: 0.85rem; transition: var(--transition);
+}
+#user-menu-btn:hover { border-color: var(--gold); }
+#user-menu-btn img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
 
-/* rules sidebar */
-.rules-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.rules-list li { font-size: 0.8rem; color: var(--text-2); display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
-.rules-list i { color: var(--gold); font-size: 0.7rem; margin-top: 3px; flex-shrink: 0; }
-.online-count { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-2); margin-top: 10px; }
-.online-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+.dropdown { position: relative; }
+.dropdown-menu {
+  display: none; position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--dropdown-bg); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm); min-width: 200px;
+  box-shadow: var(--shadow-dark); overflow: hidden; z-index: 2000;
+}
+.dropdown-menu.open { display: block; }
+.dropdown-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; color: var(--text-main); font-size: 0.88rem;
+  cursor: pointer; transition: background 0.2s; border: none;
+  background: none; width: 100%; text-align: left;
+  font-family: 'DM Sans', sans-serif;
+}
+.dropdown-item:hover { background: var(--glass); }
+.dropdown-item.danger { color: #e05c5c; }
+.dropdown-divider { height: 1px; background: var(--glass-border); margin: 4px 0; }
 
-/* MODAL */
-.modal-overlay { position: fixed; inset: 0; z-index: 700; background: rgba(3,6,14,0.92); backdrop-filter: blur(18px); display: none; align-items: center; justify-content: center; padding: 20px; }
+/* ─── HERO ─── */
+.hero {
+  position: relative; padding: 80px 24px 60px;
+  text-align: center; overflow: hidden;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(201,168,76,0.1); border: 1px solid var(--glass-border);
+  border-radius: 30px; padding: 6px 16px;
+  font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-weight: 300; line-height: 1.1;
+  margin-bottom: 16px; color: var(--text-main);
+}
+.hero h1 em { font-style: italic; color: var(--gold-light); }
+.hero p {
+  color: var(--text-muted); font-size: 1rem; max-width: 480px;
+  margin: 0 auto 36px; line-height: 1.7;
+}
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-hero {
+  padding: 14px 32px; border-radius: 50px; font-size: 0.95rem;
+  font-weight: 600; cursor: pointer; border: none; transition: var(--transition);
+  font-family: 'DM Sans', sans-serif; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-hero-gold { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #0a0806; }
+.btn-hero-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.3); }
+.btn-hero-ghost { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-main); }
+.btn-hero-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+.hero-stats {
+  display: flex; justify-content: center; gap: 48px; margin-top: 60px;
+  padding-top: 40px; border-top: 1px solid var(--glass-border);
+  flex-wrap: wrap;
+}
+.hero-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 600; color: var(--gold);
+  display: block;
+}
+.hero-stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ─── VIEW TOGGLE ─── */
+.view-toggle-wrap {
+  display: flex; justify-content: center; gap: 8px;
+  padding: 16px 24px 0; max-width: 1300px; margin: 0 auto;
+}
+.view-toggle-btn {
+  padding: 10px 20px; border-radius: 30px; font-size: 0.85rem;
+  cursor: pointer; transition: var(--transition); border: none;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  color: var(--text-muted); font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 7px; font-weight: 500;
+}
+.view-toggle-btn.active {
+  background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold);
+}
+.view-toggle-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ─── FILTERS ─── */
+.filters-section {
+  padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; max-width: 1300px; margin: 0 auto;
+}
+.filter-label { color: var(--text-muted); font-size: 0.85rem; margin-right: 4px; }
+.filter-chip {
+  padding: 8px 18px; border-radius: 30px; font-size: 0.85rem;
+  cursor: pointer; transition: var(--transition);
+  background: var(--glass); border: 1px solid var(--glass-border);
+  color: var(--text-main); font-family: 'DM Sans', sans-serif;
+}
+.filter-chip:hover, .filter-chip.active {
+  background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold);
+}
+.sort-select {
+  margin-left: auto; background: var(--glass); border: 1px solid var(--glass-border);
+  color: var(--text-main); border-radius: 30px; padding: 8px 16px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; outline: none;
+}
+.sort-select option { background: var(--modal-bg); color: var(--text-main); }
+
+/* ─── GRID VIEW ─── */
+.products-section { padding: 0 24px 80px; max-width: 1300px; margin: 0 auto; position: relative; z-index: 1; }
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 400; margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px; color: var(--text-main);
+}
+.section-title::after {
+  content: ''; flex: 1; height: 1px; background: var(--glass-border);
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+/* ─── PRODUCT CARD ─── */
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+  position: relative;
+  cursor: pointer;
+  animation: fadeUp 0.5s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.product-card:hover {
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-gold);
+}
+.product-img-wrap {
+  position: relative; aspect-ratio: 1; overflow: hidden;
+  background: var(--placeholder-bg);
+}
+.product-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.product-card:hover .product-img-wrap img { transform: scale(1.05); }
+.product-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; color: var(--text-muted);
+  background: var(--placeholder-bg);
+}
+.product-img-placeholder svg { opacity: 0.35; }
+.product-img-placeholder span { font-size: 0.75rem; opacity: 0.5; }
+
+.badge {
+  position: absolute; top: 12px; left: 12px;
+  padding: 4px 10px; border-radius: 20px; font-size: 0.72rem;
+  font-weight: 600; letter-spacing: 0.03em;
+}
+.badge-promo { background: #e05c5c; color: #fff; }
+.badge-new { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #0a0806; }
+.badge-best { background: rgba(201,168,76,0.2); border: 1px solid var(--gold); color: var(--gold); }
+
+.fav-btn {
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(10,8,6,0.65); border: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition); z-index: 2;
+  color: var(--text-muted);
+}
+.fav-btn:hover, .fav-btn.active { border-color: #e05c5c; color: #e05c5c; }
+.fav-btn.active { background: rgba(224,92,92,0.15); }
+
+.product-body { padding: 16px; }
+.product-cat {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--gold); margin-bottom: 6px;
+}
+.product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 600; color: var(--text-main);
+  margin-bottom: 6px; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.product-desc {
+  font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  margin-bottom: 12px;
+}
+.product-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid var(--glass-border); padding-top: 12px;
+}
+.product-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; font-weight: 600; color: var(--gold);
+}
+.stars { color: var(--gold); font-size: 0.75rem; margin-bottom: 2px; }
+.seller-info { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--glass-border); }
+.seller-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+.seller-name { font-size: 0.75rem; color: var(--text-muted); }
+.verified-badge { font-size: 0.65rem; background: rgba(201,168,76,0.15); color: var(--gold); padding: 2px 6px; border-radius: 10px; }
+
+.card-actions { display: flex; gap: 8px; margin-top: 12px; }
+.btn-whatsapp-card {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm);
+  background: #25D366; color: #fff; border: none;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: var(--transition); font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+}
+.btn-whatsapp-card:hover { background: #128C7E; transform: translateY(-1px); }
+.btn-detail {
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  background: var(--glass); border: 1px solid var(--glass-border);
+  color: var(--text-main); font-size: 0.82rem; cursor: pointer;
+  transition: var(--transition);
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-detail:hover { border-color: var(--gold); color: var(--gold); }
+
+.btn-delete-product {
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  background: rgba(224,92,92,0.08); border: 1px solid rgba(224,92,92,0.25);
+  color: #e05c5c; font-size: 0.8rem; cursor: pointer;
+  transition: var(--transition); font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 5px;
+}
+.btn-delete-product:hover { background: rgba(224,92,92,0.18); }
+
+/* ══════════════════════════════════════════════
+   ─── TIKTOK FULLSCREEN SCROLL VIEW ───
+══════════════════════════════════════════════ */
+#fullscreen-view {
+  display: none;
+  position: fixed; inset: 0; z-index: 500;
+  background: #000;
+}
+
+.fs-scroll-container {
+  height: 100%; overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+}
+.fs-scroll-container::-webkit-scrollbar { display: none; }
+
+.fs-slide {
+  height: 100vh; width: 100%;
+  scroll-snap-align: start;
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+
+/* Product image layer */
+.fs-img-bg {
+  position: absolute; inset: 0;
+  background: var(--placeholder-bg);
+}
+.fs-img-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.fs-slide:hover .fs-img-bg img { transform: scale(1.03); }
+
+/* Gradient overlay */
+.fs-overlay {
+  position: absolute; inset: 0;
+  background: var(--overlay-slide);
+  pointer-events: none;
+}
+
+/* Top bar (index / close) */
+.fs-topbar {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 20px 20px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 10;
+}
+.fs-counter {
+  font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.35); backdrop-filter: blur(10px);
+  padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12);
+}
+.fs-close-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.fs-close-btn:hover { background: rgba(201,168,76,0.3); border-color: var(--gold); }
+
+/* Right action sidebar */
+.fs-sidebar {
+  position: absolute; right: 16px; bottom: 160px;
+  display: flex; flex-direction: column; gap: 16px; align-items: center;
+  z-index: 10;
+}
+.fs-action-btn {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: rgba(0,0,0,0.45); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition); color: #fff; gap: 3px;
+}
+.fs-action-btn:hover { border-color: var(--gold); background: rgba(201,168,76,0.25); }
+.fs-action-btn.active { color: #e05c5c; border-color: #e05c5c; background: rgba(224,92,92,0.15); }
+.fs-action-btn span { font-size: 0.6rem; letter-spacing: 0.04em; }
+
+/* Bottom info panel */
+.fs-info {
+  position: relative; z-index: 10; padding: 0 20px 28px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.fs-badge {
+  display: inline-block;
+  padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
+  font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.fs-badge-new { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #0a0806; }
+.fs-badge-promo { background: #e05c5c; color: #fff; }
+.fs-badge-best { background: rgba(201,168,76,0.25); border: 1px solid var(--gold); color: var(--gold-light); }
+
+.fs-category {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--gold); margin-bottom: 6px;
+}
+.fs-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.7rem, 5vw, 2.4rem);
+  font-weight: 600; color: #fff; line-height: 1.15;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+.fs-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 600;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 10px; display: inline-block;
+}
+.fs-desc {
+  font-size: 0.85rem; color: rgba(255,255,255,0.72); line-height: 1.65;
+  margin-bottom: 14px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.fs-seller {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+}
+.fs-seller-avatar {
+  width: 34px; height: 34px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--gold);
+}
+.fs-seller-name { font-size: 0.82rem; color: rgba(255,255,255,0.85); font-weight: 500; }
+.fs-seller-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+
+/* Big WhatsApp button */
+.fs-whatsapp-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 16px 24px;
+  background: #25D366;
+  border-radius: 14px; border: none;
+  color: #fff; font-family: 'DM Sans', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 8px 30px rgba(37,211,102,0.45), 0 2px 8px rgba(0,0,0,0.3);
+  transition: var(--transition);
+  letter-spacing: 0.02em;
+  animation: wa-pulse 2.5s ease-in-out infinite;
+}
+.fs-whatsapp-btn:hover {
+  background: #20c35a;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(37,211,102,0.55), 0 4px 12px rgba(0,0,0,0.3);
+  animation: none;
+}
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 8px 30px rgba(37,211,102,0.45), 0 2px 8px rgba(0,0,0,0.3); }
+  50% { box-shadow: 0 8px 45px rgba(37,211,102,0.65), 0 2px 8px rgba(0,0,0,0.3); }
+}
+
+/* Scroll hint dots */
+.fs-scroll-dots {
+  position: absolute; right: 50%; transform: translateX(50%);
+  bottom: 8px; display: flex; gap: 4px; z-index: 10;
+}
+.fs-dot {
+  width: 4px; border-radius: 2px; background: rgba(255,255,255,0.4);
+  transition: all 0.3s ease;
+  height: 4px;
+}
+.fs-dot.active { background: var(--gold); width: 16px; }
+
+/* Progress bar */
+.fs-progress {
+  position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: rgba(255,255,255,0.12);
+}
+.fs-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.4s ease;
+}
+
+/* Placeholder in fullscreen */
+.fs-placeholder-bg {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #1a1208 0%, #2c1f0a 40%, #1a1208 100%);
+}
+.fs-placeholder-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(201,168,76,0.1); border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center; color: var(--gold);
+}
+.fs-placeholder-text { font-size: 0.8rem; color: rgba(255,255,255,0.35); }
+
+/* ─── EMPTY STATE ─── */
+.empty-state {
+  text-align: center; padding: 80px 24px; color: var(--text-muted);
+}
+.empty-state-icon { margin-bottom: 16px; opacity: 0.5; display: flex; justify-content: center; }
+.empty-state h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 8px; color: var(--text-main); }
+
+/* ─── MODAL OVERLAY ─── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 3000;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center;
+  padding: 24px;
+}
 .modal-overlay.open { display: flex; }
-.modal { background: linear-gradient(145deg, #0f1623, #111827); border: 1px solid rgba(246,183,60,0.12); border-radius: var(--radius-xl); width: 100%; max-width: 540px; max-height: 92vh; overflow-y: auto; padding: 36px; box-shadow: var(--shadow), 0 0 80px rgba(246,183,60,0.06); animation: modalIn 0.3s cubic-bezier(.34,1.56,.64,1); position: relative; }
-@keyframes modalIn { from { transform: scale(.9) translateY(12px); opacity:0; } to { transform: none; opacity:1; } }
-.modal::-webkit-scrollbar { width: 4px; }
-.modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-.modal-close { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text-2); cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; transition: var(--trans); }
-.modal-close:hover { background: var(--rose-dim); border-color: var(--rose); color: var(--rose); }
-.modal-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 6px; color: var(--text-1); }
-.modal-title span { color: var(--gold); font-style: italic; }
-.modal-subtitle { font-size: 0.85rem; color: var(--text-2); margin-bottom: 28px; line-height: 1.6; }
-.form-group { margin-bottom: 18px; }
-.form-label { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 600; color: var(--text-2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-label i { color: var(--gold); }
-.form-control { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-1); font-size: 0.9rem; outline: none; font-family: 'Plus Jakarta Sans', sans-serif; transition: var(--trans); }
-.form-control::placeholder { color: var(--text-3); }
-.form-control:focus { border-color: rgba(246,183,60,0.4); background: var(--gold-glow); box-shadow: 0 0 0 3px rgba(246,183,60,0.07); }
-select.form-control { appearance: none; cursor: pointer; padding-right: 36px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
-select.form-control option { background: #111827; }
-.btn-full { width: 100%; padding: 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, #f6b73c, #f59e0b); color: var(--ink); box-shadow: 0 4px 20px rgba(246,183,60,0.25); transition: var(--trans); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; }
-.btn-full:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(246,183,60,0.35); }
-.btn-full:disabled { opacity: 0.6; cursor: not-allowed; }
-.google-btn-big { width: 100%; padding: 14px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-1); cursor: pointer; font-size: 0.95rem; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 12px; transition: var(--trans); }
-.google-btn-big:hover { background: rgba(255,255,255,0.09); border-color: rgba(246,183,60,0.3); transform: translateY(-1px); }
-.google-btn-big img { width: 20px; height: 20px; }
-
-/* viewer */
-.viewer-modal { max-width: 860px !important; }
-.viewer-frame { width: 100%; height: 520px; border: none; border-radius: var(--radius); background: #000; }
-.viewer-img { max-width: 100%; max-height: 500px; display: block; margin: 0 auto; border-radius: var(--radius); }
-.viewer-actions { margin-top: 16px; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
-
-/* FOOTER */
-footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 28px; max-width: 1340px; margin: 0 auto; }
-.footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
-.footer-brand { display: flex; align-items: center; gap: 10px; }
-.footer-brand span { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--gold); font-style: italic; }
-.footer-copy { font-size: 0.78rem; color: var(--text-3); }
-.footer-copy strong { color: var(--text-2); }
-.footer-links { display: flex; gap: 16px; }
-.footer-links a { font-size: 0.78rem; color: var(--text-3); text-decoration: none; transition: var(--trans); }
-.footer-links a:hover { color: var(--gold); }
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .chat-layout { grid-template-columns: 1fr; }
-  .chat-sidebar { display: none; }
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-stats-card { flex-direction: row; flex-wrap: wrap; min-width: unset; justify-content: center; }
+.modal {
+  background: var(--modal-bg); border: 1px solid var(--glass-border);
+  border-radius: 20px; width: 100%; max-width: 520px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--shadow-dark);
+  animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-@media (max-width: 640px) {
-  .nav-inner { padding: 0 16px; gap: 8px; }
-  .logo-tagline { display: none; }
-  #user-name { display: none; }
-  main { padding: 24px 16px 60px; }
-  .hero { padding: 32px 0 28px; }
-  .lib-grid { grid-template-columns: 1fr; }
-  .tab-bar { width: 100%; }
-  .tab-btn { flex: 1; justify-content: center; }
-  .modal { padding: 24px; }
-  footer { padding: 24px 16px; }
-  .chat-main-wrap { height: calc(100vh - 220px); min-height: 420px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-header {
+  padding: 24px 28px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--glass-border); padding-bottom: 20px;
+}
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 600; color: var(--text-main);
+}
+.modal-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  color: var(--text-muted); cursor: pointer; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.modal-close:hover { border-color: var(--gold); color: var(--gold); }
+.modal-body { padding: 24px 28px 28px; }
+
+/* detail modal */
+.detail-img { width: 100%; border-radius: 12px; margin-bottom: 16px; max-height: 300px; object-fit: cover; }
+.detail-cat { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 6px; }
+.detail-name { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
+.detail-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 12px; }
+.detail-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
+.detail-seller { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; padding: 14px; background: var(--glass); border-radius: var(--radius-sm); border: 1px solid var(--glass-border); }
+.detail-seller img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+.detail-seller-name { font-weight: 600; color: var(--text-main); font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+.detail-seller-phone { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+.btn-whatsapp {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  background: #25D366; color: #fff; border: none;
+  font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: var(--transition); font-family: 'DM Sans', sans-serif;
+  text-decoration: none; box-shadow: 0 6px 24px rgba(37,211,102,0.35);
+}
+.btn-whatsapp:hover { background: #128C7E; }
+
+/* ─── FORM ELEMENTS ─── */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 0.83rem; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.02em; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 12px 16px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm); color: var(--text-main);
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  outline: none; transition: var(--transition);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+}
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-select option { background: var(--modal-bg); }
+.img-upload-area {
+  border: 2px dashed var(--glass-border); border-radius: var(--radius-sm);
+  padding: 32px; text-align: center; cursor: pointer;
+  transition: var(--transition); position: relative;
+}
+.img-upload-area:hover { border-color: var(--gold); }
+.img-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.img-upload-area p { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; }
+#img-preview { width: 100%; max-height: 160px; object-fit: cover; border-radius: 8px; margin-top: 12px; display: none; }
+.btn-submit {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a0806; border: none; border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-submit:hover { transform: translateY(-1px); box-shadow: var(--shadow-gold); }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ─── AUTH MODAL ─── */
+.auth-modal-content { padding: 40px 28px; text-align: center; }
+.auth-logo {
+  font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-style: italic; font-weight: 600;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.auth-sub { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 28px; line-height: 1.6; }
+.btn-google {
+  width: 100%; padding: 14px; border-radius: var(--radius-sm);
+  background: var(--glass); border: 1px solid var(--glass-border);
+  color: var(--text-main); font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-google:hover { border-color: var(--gold); }
+.auth-terms { font-size: 0.73rem; color: var(--text-muted); margin-top: 16px; line-height: 1.5; }
+
+/* ─── TOAST ─── */
+.toast-container { position: fixed; top: 80px; right: 20px; z-index: 9000; display: flex; flex-direction: column; gap: 8px; }
+.toast {
+  background: var(--modal-bg); border: 1px solid var(--glass-border);
+  border-radius: 12px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow-dark); font-size: 0.88rem; color: var(--text-main);
+  animation: toastIn 0.3s ease;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.toast.error { border-color: rgba(224,92,92,0.4); }
+
+/* ─── ADMIN PANEL ─── */
+.admin-panel { padding: 40px 24px 80px; max-width: 1200px; margin: 0 auto; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+.admin-badge { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #0a0806; padding: 6px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; }
+.admin-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+.admin-stat-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 20px; text-align: center; }
+.admin-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--gold); }
+.admin-stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+.admin-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+.admin-tab { padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; cursor: pointer; transition: var(--transition); border: 1px solid var(--glass-border); background: var(--glass); color: var(--text-muted); font-family: 'DM Sans', sans-serif; }
+.admin-tab.active { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold); }
+.users-table { width: 100%; border-collapse: collapse; }
+.users-table th { text-align: left; padding: 12px 16px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); }
+.users-table td { padding: 14px 16px; border-bottom: 1px solid var(--glass-border); font-size: 0.88rem; color: var(--text-main); }
+.user-row-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.blocked-tag { background: rgba(224,92,92,0.12); color: #e05c5c; padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; }
+.active-tag { background: rgba(37,211,102,0.1); color: #25D366; padding: 3px 10px; border-radius: 10px; font-size: 0.75rem; }
+.btn-block { background: rgba(224,92,92,0.08); border: 1px solid rgba(224,92,92,0.25); color: #e05c5c; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 5px; }
+.btn-unblock { background: rgba(37,211,102,0.08); border: 1px solid rgba(37,211,102,0.25); color: #25D366; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 5px; }
+
+/* ─── DELIVERY BANNER ─── */
+.delivery-banner {
+  background: rgba(201,168,76,0.08); border: 1px solid var(--glass-border);
+  border-radius: var(--radius); padding: 18px 24px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.delivery-icon { font-size: 1.8rem; }
+.delivery-text { flex: 1; }
+.delivery-text strong { display: block; color: var(--text-main); font-size: 0.95rem; margin-bottom: 2px; }
+.delivery-text span { font-size: 0.83rem; color: var(--text-muted); }
+.delivery-whatsapp {
+  background: #25D366; color: #fff; border: none; padding: 10px 20px;
+  border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; gap: 8px;
+  font-family: 'DM Sans', sans-serif; white-space: nowrap;
+  transition: var(--transition);
+}
+.delivery-whatsapp:hover { background: #128C7E; }
+
+/* ─── LOADER ─── */
+.loader {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--glass-border); border-top-color: var(--gold);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.full-loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 6px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-::selection { background: rgba(246,183,60,0.25); color: var(--text-1); }
+/* ─── MOBILE NAV ─── */
+.mobile-nav-bar {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
+  background: var(--nav-bg); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--glass-border);
+  padding: 8px 16px 20px; justify-content: space-around; align-items: center;
+}
+.mobile-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  color: var(--text-muted); font-size: 0.65rem; cursor: pointer;
+  transition: color 0.2s; background: none; border: none;
+  font-family: 'DM Sans', sans-serif; padding: 6px 12px;
+}
+.mobile-nav-item.active, .mobile-nav-item:hover { color: var(--gold); }
+.mobile-add-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a0806; border: none; font-size: 1.4rem;
+  cursor: pointer; transition: var(--transition);
+  box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+  display: flex; align-items: center; justify-content: center;
+}
+.mobile-add-btn:hover { transform: scale(1.1); }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.5rem; }
+  .hero-stats { gap: 24px; }
+  .mobile-nav-bar { display: flex; }
+  body { padding-bottom: 80px; }
+  nav .nav-search { display: none; }
+  .delivery-banner { flex-direction: column; text-align: center; }
+  .delivery-whatsapp { margin: 0 auto; }
+  .nav-btn span { display: none; }
+  .fs-info { max-width: 100%; }
+  .admin-stats { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .products-section { padding: 0 12px 80px; }
+  nav { padding: 0 12px; gap: 8px; }
+}
 </style>
 </head>
 <body>
 
-<div class="bg-canvas"></div>
-<div class="bg-grid"></div>
-
-<!-- SPINNER -->
-<div id="global-spinner">
-  <div class="spinner-logo">SCAIn<em>-1</em></div>
-  <div class="spinner-subtitle">ISP Bukavu</div>
-  <div class="spinner-ring"></div>
+<!-- ─── INITIAL LOADER ─── -->
+<div class="full-loader" id="full-loader">
+  <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-style:italic;background:linear-gradient(135deg,#e8c97a,#c9a84c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">LuxParfum</div>
+  <div class="loader"></div>
 </div>
 
-<!-- TOASTS -->
-<div id="toast-container"></div>
-
-<!-- ==================== HEADER ==================== -->
-<header>
-  <div class="nav-inner">
-    <a class="logo-wrap" href="#">
-      <div class="logo-badge" id="logo-box">
-        <img src="logo.jpg" alt="SCAIn" onerror="this.style.display='none';this.parentElement.textContent='SC'" />
-      </div>
-      <div>
-        <div class="logo-name">SCAIn<em>-1</em></div>
-        <div class="logo-tagline">ISP Bukavu · Plateforme Éducative</div>
-      </div>
-    </a>
-
-    <div class="nav-links">
-      <button class="nav-link" id="nav-docs" onclick="showPanel('docs')">
-        <i class="fa-solid fa-photo-film"></i> Bibliothèque
-      </button>
-      <button class="nav-link" id="nav-chat" onclick="showPanel('chat')">
-        <i class="fa-solid fa-comments"></i> Discussions
-      </button>
-    </div>
-
-    <div class="nav-divider"></div>
-
-    <button class="btn-google" id="btn-google-login" onclick="loginWithGoogle()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
-      <span>Se connecter</span>
-    </button>
-
-    <div id="user-pill" style="display:none;">
-      <div class="avatar" id="user-avatar">?</div>
-      <span id="user-name"></span>
-      <span class="admin-badge" id="admin-badge" style="display:none;">Admin</span>
-    </div>
-    <button class="btn btn-sm btn-ghost" id="btn-logout" style="display:none;" onclick="logout()">
-      <i class="fa-solid fa-right-from-bracket"></i>
-    </button>
+<!-- ═══════════════════════════════════════
+     TIKTOK FULLSCREEN SCROLL VIEW
+═══════════════════════════════════════ -->
+<div id="fullscreen-view">
+  <div class="fs-scroll-container" id="fs-scroll-container">
+    <!-- Slides injected by JS -->
   </div>
-</header>
+</div>
 
-<!-- ==================== MAIN ==================== -->
-<main>
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar" style="display:none">
+  <a href="#" class="nav-logo">LuxParfum</a>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-eyebrow">
-          <span class="pulse"></span>
-          Plateforme officielle — ISP Bukavu
-        </div>
-        <h1>Partagez le <span class="accent">Savoir,</span><br>Éclairez l'Avenir.</h1>
-        <p class="hero-desc">Accédez aux syllabus, examens corrigés et ressources pédagogiques. Publiez, likez, commentez — comme sur les réseaux sociaux, mais pour les étudiants.</p>
-        <div class="hero-cta">
-          <button class="btn btn-md btn-gold" onclick="showPanel('docs')">
-            <i class="fa-solid fa-photo-film"></i> Explorer la bibliothèque
-          </button>
-          <button class="btn btn-md btn-ghost" onclick="showPanel('chat')">
-            <i class="fa-brands fa-whatsapp"></i> Rejoindre le chat
-          </button>
-        </div>
-        <div class="connect-banner" id="hero-connect-banner">
-          <div class="connect-banner-text">
-            <strong><i class="fa-solid fa-lock" style="color:var(--gold);margin-right:6px;"></i>Accès complet gratuit</strong>
-            Connectez-vous pour publier, liker et participer aux discussions.
-          </div>
-          <button class="btn-google-hero" onclick="loginWithGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
-            Se connecter avec Google
-          </button>
-        </div>
-      </div>
-      <div class="hero-stats-card">
-        <div class="stat-row">
-          <div class="stat-icon gold"><i class="fa-solid fa-file-lines"></i></div>
-          <div><span class="stat-num" id="stat-docs">—</span><span class="stat-lbl">Documents partagés</span></div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-icon teal"><i class="fa-solid fa-users"></i></div>
-          <div><span class="stat-num" id="stat-users">—</span><span class="stat-lbl">Membres connectés</span></div>
-        </div>
-        <div class="stat-row">
-          <div class="stat-icon sky"><i class="fa-solid fa-message"></i></div>
-          <div><span class="stat-num" id="stat-msgs">—</span><span class="stat-lbl">Messages échangés</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="feature-strip" style="margin-top:36px;">
-      <div class="feature-chip gold"><i class="fa-solid fa-shield-halved"></i> Connexion Google sécurisée</div>
-      <div class="feature-chip teal"><i class="fa-brands fa-whatsapp"></i> Chat style WhatsApp</div>
-      <div class="feature-chip sky"><i class="fa-brands fa-facebook"></i> Bibliothèque style Facebook</div>
-      <div class="feature-chip"><i class="fa-solid fa-heart"></i> Likes & interactions</div>
-      <div class="feature-chip"><i class="fa-solid fa-reply"></i> Répondre aux messages</div>
-    </div>
-  </section>
-
-  <!-- TABS -->
-  <div class="tab-bar">
-    <button class="tab-btn active" id="tab-docs" onclick="showPanel('docs')">
-      <i class="fa-solid fa-photo-film"></i> Bibliothèque
-      <span class="tab-count" id="tab-docs-count">0</span>
-    </button>
-    <button class="tab-btn" id="tab-chat" onclick="showPanel('chat')">
-      <i class="fa-brands fa-whatsapp"></i> Chat Global
-      <span class="tab-count" id="tab-chat-count">0</span>
-    </button>
+  <div class="nav-search">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--text-muted);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search-input" placeholder="Rechercher un parfum…">
   </div>
 
-  <!-- ============ PANEL: LIBRARY (Facebook-style) ============ -->
-  <div id="panel-docs" class="active">
-    <div class="search-filter-row">
-      <div class="search-wrap">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="search-input" placeholder="Rechercher cours, examens, syllabus…" oninput="filterDocs()" />
-      </div>
+  <button class="nav-btn nav-btn-gold" id="btn-publish" style="display:none" onclick="openPublishModal()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <span>Publier</span>
+  </button>
+
+  <button class="nav-btn nav-btn-outline" id="btn-login" onclick="showAuthModal()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+    <span>Connexion</span>
+  </button>
+
+  <!-- Dark/Light mode toggle -->
+  <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Changer le thème" aria-label="Toggle theme">
+    <!-- Sun icon (visible in dark mode) -->
+    <svg class="icon-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/>
+      <line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <!-- Moon icon (visible in light mode) -->
+    <svg class="icon-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+
+  <!-- Logged-in user menu -->
+  <div class="dropdown" id="user-menu-wrap" style="display:none">
+    <button id="user-menu-btn" onclick="toggleUserMenu()">
+      <img id="nav-user-photo" src="" alt="">
+      <span id="nav-user-name"></span>
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="dropdown-menu" id="user-dropdown">
+      <button class="dropdown-item" id="btn-admin-panel" onclick="showAdmin()" style="display:none">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Panneau Admin
+      </button>
+      <button class="dropdown-item" onclick="showMarketplace()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Marketplace
+      </button>
+      <button class="dropdown-item" onclick="showFavorites()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Mes Favoris
+      </button>
+      <div class="dropdown-divider"></div>
+      <button class="dropdown-item danger" onclick="handleLogout()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Déconnexion
+      </button>
+      <button class="dropdown-item danger" id="btn-delete-account" onclick="handleDeleteAccount()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+        Supprimer mon compte
+      </button>
     </div>
-    <div class="filter-row">
-      <select class="filter-select" id="filter-promo" onchange="filterDocs()">
-        <option value="">Toutes les promotions</option>
-        <option value="Bac1">Bac 1</option>
-        <option value="Bac2">Bac 2</option>
-        <option value="Bac3">Bac 3</option>
-        <option value="M1">M1</option>
-        <option value="M2">M2</option>
+  </div>
+</nav>
+
+<!-- ─── MAIN CONTENT ─── -->
+<main id="main-content" style="display:none">
+
+  <!-- ── MARKETPLACE PAGE ── -->
+  <div id="page-marketplace">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-eyebrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.523 5.845L0 24l6.341-1.506A11.935 11.935 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.81 9.81 0 0 1-5.002-1.368l-.36-.213-3.726.885.939-3.618-.235-.373A9.818 9.818 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        Livraison à Bukavu · Discutons sur WhatsApp
+      </div>
+      <h1>La Senteur<br><em>de Bukavu</em></h1>
+      <p>Découvrez de vrais parfums et des huiles de qualité à des prix très bas. Commandez directement chez les vendeurs ici à Bukavu.</p>
+      <div class="hero-actions">
+        <button class="btn-hero btn-hero-gold" onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'})">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Explorer les parfums
+        </button>
+        <button class="btn-hero btn-hero-ghost" onclick="openPublishModal()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Vendre mon parfum
+        </button>
+      </div>
+      <div class="hero-stats" id="hero-stats">
+        <div>
+          <span class="hero-stat-num" id="stat-products">…</span>
+          <span class="hero-stat-label">Produits disponibles</span>
+        </div>
+        <div>
+          <span class="hero-stat-num" id="stat-sellers">…</span>
+          <span class="hero-stat-label">Vendeurs actifs</span>
+        </div>
+        <div>
+          <span class="hero-stat-num">Bukavu</span>
+          <span class="hero-stat-label">Livraison locale</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Delivery Banner -->
+    <div class="delivery-banner" style="margin:0 24px 32px;max-width:none">
+      <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--gold);flex-shrink:0"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <div class="delivery-text">
+        <strong>Livraison à domicile — Bukavu</strong>
+        <span>Commandez via WhatsApp et recevez votre parfum rapidement. Délai : 24–48h.</span>
+      </div>
+      <button class="delivery-whatsapp" onclick="openWhatsAppGeneral()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.523 5.845L0 24l6.341-1.506A11.935 11.935 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.81 9.81 0 0 1-5.002-1.368l-.36-.213-3.726.885.939-3.618-.235-.373A9.818 9.818 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        Contacter pour livraison
+      </button>
+    </div>
+
+    <!-- View toggle + Filters -->
+    <div class="view-toggle-wrap">
+      <button class="view-toggle-btn active" id="btn-grid-view" onclick="switchView('grid')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Vue Grille
+      </button>
+      <button class="view-toggle-btn" id="btn-fs-view" onclick="switchView('fullscreen')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Vue Plein Écran
+      </button>
+    </div>
+
+    <div class="filters-section" id="filters-section">
+      <span class="filter-label">Filtrer :</span>
+      <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">Tous</button>
+      <button class="filter-chip" data-filter="filles" onclick="setFilter('filles', this)">Filles</button>
+      <button class="filter-chip" data-filter="garçons" onclick="setFilter('garçons', this)">Garçons</button>
+      <button class="filter-chip" data-filter="mixte" onclick="setFilter('mixte', this)">Mixte</button>
+      <select class="sort-select" id="sort-select" onchange="renderProducts()">
+        <option value="recent">Plus récents</option>
+        <option value="price-asc">Prix croissant</option>
+        <option value="price-desc">Prix décroissant</option>
       </select>
-      <select class="filter-select" id="filter-type" onchange="filterDocs()">
-        <option value="">Tous les types</option>
-        <option value="Image">Image</option>
-        <option value="PDF">PDF</option>
-        <option value="Docx">Docx / Word</option>
-        <option value="Lien">Lien externe</option>
-      </select>
     </div>
-    <div class="panel-topbar">
-      <div>
-        <h2 class="panel-title">Ressources <span>disponibles</span></h2>
-        <span class="doc-count-badge" id="doc-count-label"><i class="fa-solid fa-circle-nodes"></i> chargement…</span>
+
+    <!-- Grid Products -->
+    <section class="products-section">
+      <h2 class="section-title">Parfums & Huiles disponibles</h2>
+      <div class="products-grid" id="products-grid">
+        <div style="grid-column:1/-1;text-align:center;padding:60px 0">
+          <div class="loader" style="margin:0 auto"></div>
+          <p style="margin-top:12px;color:var(--text-muted)">Chargement des produits…</p>
+        </div>
       </div>
-      <button class="btn btn-md btn-gold" id="btn-add-doc" onclick="openAddDoc()" style="display:none;">
-        <i class="fa-solid fa-plus"></i> Publier un document
-      </button>
-    </div>
-    <div class="lib-grid" id="lib-grid">
-      <div class="empty-state">
-        <i class="fa-solid fa-circle-notch fa-spin empty-icon"></i>
-        <p>Chargement des documents…</p>
-      </div>
+    </section>
+  </div>
+
+  <!-- ── FAVORITES PAGE ── -->
+  <div id="page-favorites" style="display:none">
+    <div class="products-section" style="padding-top:40px">
+      <h2 class="section-title">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--gold)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Mes Favoris
+      </h2>
+      <div class="products-grid" id="favorites-grid"></div>
     </div>
   </div>
 
-  <!-- ============ PANEL: CHAT (WhatsApp-style) ============ -->
-  <div id="panel-chat">
-    <div class="chat-layout">
-
-      <!-- Main chat -->
-      <div class="chat-main-wrap">
-        <div class="chat-top">
-          <div class="chat-group-avatar"><i class="fa-solid fa-graduation-cap"></i></div>
-          <div class="chat-top-info">
-            <h3>Chat Global ISP Bukavu</h3>
-            <p id="chat-member-count">Espace d'entraide & de partage</p>
-          </div>
-          <div class="live-dot" title="Actif en temps réel"></div>
+  <!-- ── ADMIN PAGE ── -->
+  <div id="page-admin" style="display:none">
+    <div class="admin-panel">
+      <div class="admin-header">
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--text-main)">Panneau Administration</h2>
+        <span class="admin-badge">ADMIN</span>
+      </div>
+      <div class="admin-stats">
+        <div class="admin-stat-card">
+          <div class="admin-stat-num" id="a-stat-products">—</div>
+          <div class="admin-stat-label">Produits totaux</div>
         </div>
-
-        <div class="chat-messages" id="chat-messages"></div>
-
-        <!-- Reply bar -->
-        <div id="reply-bar">
-          <div class="reply-bar-content">
-            <div class="reply-bar-name" id="reply-bar-name"></div>
-            <div class="reply-bar-text" id="reply-bar-text"></div>
-          </div>
-          <button class="reply-bar-close" onclick="cancelReply()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="admin-stat-card">
+          <div class="admin-stat-num" id="a-stat-users">—</div>
+          <div class="admin-stat-label">Utilisateurs</div>
         </div>
-
-        <div class="chat-input-area">
-          <div class="chat-input-row" id="chat-input-wrap" style="display:none;">
-            <input type="text" id="chat-input" placeholder="Tapez un message…" maxlength="800"
-                   onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}" />
-            <button class="chat-send" onclick="sendMessage()" title="Envoyer">
-              <i class="fa-solid fa-paper-plane"></i>
-            </button>
-          </div>
-          <div class="chat-login-bar" id="chat-login-notice">
-            <a onclick="loginWithGoogle()"><i class="fa-brands fa-google"></i> Connectez-vous</a> pour participer à la discussion.
-          </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-num" id="a-stat-blocked">—</div>
+          <div class="admin-stat-label">Utilisateurs bloqués</div>
         </div>
       </div>
-
-      <!-- Sidebar -->
-      <div class="chat-sidebar">
-        <div class="sidebar-card">
-          <h4><i class="fa-solid fa-users" style="color:var(--teal);margin-right:8px;"></i>Membres connectés <span id="online-badge" style="font-size:0.7rem;color:var(--text-3);font-family:'JetBrains Mono',monospace;font-style:normal;">(0)</span></h4>
-          <div class="members-list" id="members-list">
-            <p style="font-size:0.8rem;color:var(--text-3);">Connectez-vous pour voir les membres.</p>
-          </div>
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="showAdminTab('users', this)">Utilisateurs</button>
+        <button class="admin-tab" onclick="showAdminTab('products', this)">Tous les produits</button>
+      </div>
+      <div id="admin-tab-users">
+        <div style="overflow-x:auto">
+          <table class="users-table" id="users-table">
+            <thead><tr><th>Utilisateur</th><th>Email</th><th>Statut</th><th>Action</th></tr></thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="4" style="text-align:center;padding:40px;color:var(--text-muted)"><div class="loader" style="margin:0 auto"></div></td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="sidebar-card">
-          <h4><i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:8px;"></i>Règles du chat</h4>
-          <ul class="rules-list">
-            <li><i class="fa-solid fa-check"></i> Restez respectueux envers tous</li>
-            <li><i class="fa-solid fa-check"></i> Partagez des ressources utiles</li>
-            <li><i class="fa-solid fa-check"></i> Évitez le spam et les répétitions</li>
-            <li><i class="fa-solid fa-check"></i> Posez vos questions clairement</li>
-          </ul>
-          <div class="online-count" style="margin-top:12px;">
-            <div class="online-dot"></div>
-            Plateforme active en temps réel
-          </div>
-        </div>
+      </div>
+      <div id="admin-tab-products" style="display:none">
+        <div class="products-grid" id="admin-products-grid"></div>
       </div>
     </div>
   </div>
 
 </main>
 
-<!-- ==================== FOOTER ==================== -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <span>SCAIn-1</span>
-      <span style="color:var(--text-3);font-family:inherit;font-size:0.78rem;font-style:normal;">ISP Bukavu</span>
-    </div>
-    <p class="footer-copy">© 2025 Conçu par <strong>Séraphin BALOLA CIZA</strong> · Tous droits réservés</p>
-    <div class="footer-links">
-      <a href="#" onclick="showPanel('docs')">Bibliothèque</a>
-      <a href="#" onclick="showPanel('chat')">Chat</a>
-    </div>
-  </div>
-</footer>
+<!-- ─── MOBILE BOTTOM NAV ─── -->
+<div class="mobile-nav-bar" id="mobile-nav" style="display:none">
+  <button class="mobile-nav-item active" id="mob-home" onclick="showMarketplace()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    Accueil
+  </button>
+  <button class="mobile-nav-item" id="mob-fs" onclick="switchView('fullscreen')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Découvrir
+  </button>
+  <button class="mobile-add-btn" onclick="openPublishModal()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+  <button class="mobile-nav-item" id="mob-favs" onclick="showFavorites()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    Favoris
+  </button>
+  <button class="mobile-nav-item" id="mob-login" onclick="showAuthModal()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Profil
+  </button>
+</div>
 
-<!-- ==================== MODAL: AUTH ==================== -->
-<div class="modal-overlay" id="modal-auth">
-  <div class="modal" style="max-width:420px;text-align:center;">
-    <button class="modal-close" onclick="closeModal('modal-auth')">✕</button>
-    <div style="width:64px;height:64px;border-radius:18px;background:var(--gold-dim);border:1px solid rgba(246,183,60,0.3);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--gold);margin:0 auto 20px;">
-      <i class="fa-solid fa-lock"></i>
+<!-- ─── AUTH MODAL ─── -->
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal" style="max-width:400px">
+    <div class="auth-modal-content">
+      <div class="auth-logo">LuxParfum</div>
+      <p class="auth-sub">Connectez-vous pour vendre vos parfums et accéder à toutes les fonctionnalités.</p>
+      <button class="btn-google" onclick="handleGoogleLogin()">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continuer avec Google
+      </button>
+      <p class="auth-terms">En vous connectant, vous acceptez nos conditions d'utilisation.</p>
+      <button onclick="closeModal('auth-modal')" style="background:none;border:none;color:var(--text-muted);font-size:0.85rem;cursor:pointer;margin-top:12px">Fermer</button>
     </div>
-    <h2 class="modal-title">Accéder à <span>SCAIn-1</span></h2>
-    <p class="modal-subtitle">Connectez-vous avec votre compte Google pour accéder à toutes les fonctionnalités.</p>
-    <button class="google-btn-big" onclick="loginWithGoogle()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
-      Continuer avec Google
-    </button>
   </div>
 </div>
 
-<!-- ==================== MODAL: PUBLISH DOCUMENT ==================== -->
-<div class="modal-overlay" id="modal-add-doc">
+<!-- ─── PUBLISH MODAL ─── -->
+<div class="modal-overlay" id="publish-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-add-doc')">✕</button>
-    <h2 class="modal-title">Publier un <span>Document</span></h2>
-    <p class="modal-subtitle">Partagez vos ressources via un lien URL avec tous les étudiants.</p>
-    <div class="form-group">
-      <label class="form-label"><i class="fa-solid fa-heading"></i> Titre du document *</label>
-      <input type="text" class="form-control" id="doc-title" placeholder="Ex: Syllabus Base de données — Bac2" />
+    <div class="modal-header">
+      <h3 class="modal-title">Publier un produit</h3>
+      <button class="modal-close" onclick="closeModal('publish-modal')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
-    <div class="form-group">
-      <label class="form-label"><i class="fa-solid fa-graduation-cap"></i> Promotion *</label>
-      <select class="form-control" id="doc-category">
-        <option value="">— Choisir la promotion —</option>
-        <option value="Bac1">Bac 1</option>
-        <option value="Bac2">Bac 2</option>
-        <option value="Bac3">Bac 3</option>
-        <option value="M1">M1</option>
-        <option value="M2">M2</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label"><i class="fa-solid fa-link"></i> URL du document *</label>
-      <input type="url" class="form-control" id="doc-url" placeholder="https://… (lien Firebase Storage, Drive, Dropbox…)" />
-      <p style="font-size:0.75rem;color:var(--text-3);margin-top:6px;"><i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:4px;"></i>Collez le lien public. Les images s'afficheront directement, les PDF et Docx avec une icône élégante.</p>
-    </div>
-    <button class="btn-full" id="publish-btn" onclick="publishDocument()">
-      <i class="fa-solid fa-paper-plane"></i> Publier le document
-    </button>
-  </div>
-</div>
-
-<!-- ==================== MODAL: VIEWER ==================== -->
-<div class="modal-overlay" id="modal-viewer">
-  <div class="modal viewer-modal" style="max-width:860px;">
-    <button class="modal-close" onclick="closeModal('modal-viewer')">✕</button>
-    <h2 class="modal-title" id="viewer-title">Aperçu</h2>
-    <p style="font-size:0.82rem;color:var(--text-2);margin-bottom:18px;" id="viewer-meta"></p>
-    <div id="viewer-frame-wrap"></div>
-    <div class="viewer-actions">
-      <a id="viewer-open" href="#" target="_blank" rel="noopener noreferrer">
-        <button class="btn btn-md btn-ghost"><i class="fa-solid fa-eye"></i> Lire en ligne</button>
-      </a>
-      <a id="viewer-download" href="#" target="_blank" rel="noopener noreferrer" download>
-        <button class="btn btn-md btn-gold"><i class="fa-solid fa-download"></i> Télécharger</button>
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== FIREBASE v10 ==================== -->
-<script type="module">
-import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider,
-         signInWithPopup, signOut,
-         onAuthStateChanged }                   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc,
-         deleteDoc, doc, onSnapshot, query,
-         orderBy, updateDoc, increment,
-         serverTimestamp, getDoc, setDoc,
-         arrayUnion, arrayRemove, where,
-         getDocs }                              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// ─── CONFIG ──────────────────────────────────────────────────────
-const firebaseConfig = {
-  apiKey:            "AIzaSyCC2DYvR3U3iJS6-MYxINLt1OE2AaEQ95M",
-  authDomain:        "scain-1.firebaseapp.com",
-  projectId:         "scain-1",
-  storageBucket:     "scain-1.firebasestorage.app",
-  messagingSenderId: "1067933311345",
-  appId:             "1:1067933311345:web:04d099d087f23128c696d0"
-};
-
-const app            = initializeApp(firebaseConfig);
-const auth           = getAuth(app);
-const db             = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
-
-const ADMIN_EMAIL    = "scizabalola@gmail.com";
-let currentUser      = null;
-let allDocs          = [];
-let replyTo          = null;  // { id, senderName, text }
-let bannedUsers      = new Set();
-let onlineMembers    = {};    // uid → { displayName, photoURL, email }
-
-// ─── TOAST ───────────────────────────────────────────────────────
-window.showToast = function(msg, type = 'info') {
-  const c  = document.getElementById('toast-container');
-  const el = document.createElement('div');
-  el.className = `toast ${type}`;
-  const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
-  el.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i> ${msg}`;
-  c.appendChild(el);
-  setTimeout(() => el.remove(), 3800);
-};
-
-// ─── HELPERS ─────────────────────────────────────────────────────
-function getInitials(str) {
-  if (!str) return '?';
-  const parts = str.split(/[\s@]/);
-  return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || str[0].toUpperCase();
-}
-
-function escHtml(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function isImageUrl(url) {
-  if (!url) return false;
-  return !!url.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp|svg)/);
-}
-function isPdfUrl(url) {
-  if (!url) return false;
-  return url.toLowerCase().includes('.pdf') || url.toLowerCase().includes('/pdf');
-}
-function isDocxUrl(url) {
-  if (!url) return false;
-  return url.toLowerCase().match(/\.(docx?|doc)\b/);
-}
-function docType(url) {
-  if (isImageUrl(url)) return 'Image';
-  if (isPdfUrl(url))   return 'PDF';
-  if (isDocxUrl(url))  return 'Docx';
-  return 'Lien';
-}
-
-function fmtDate(ts) {
-  if (!ts) return '—';
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  return d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
-}
-function fmtTime(ts) {
-  if (!ts) return '';
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  return d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-}
-function fmtDateDivider(ts) {
-  if (!ts) return '';
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  const today = new Date();
-  const diff  = Math.floor((today - d) / 86400000);
-  if (diff === 0) return "Aujourd'hui";
-  if (diff === 1) return "Hier";
-  return d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
-}
-
-// ─── ONLINE PRESENCE ──────────────────────────────────────────────
-async function setPresence(user) {
-  if (!user) return;
-  try {
-    await setDoc(doc(db, 'presence', user.uid), {
-      uid:         user.uid,
-      displayName: user.displayName || user.email.split('@')[0],
-      email:       user.email,
-      photoURL:    user.photoURL || null,
-      lastSeen:    serverTimestamp(),
-      online:      true
-    }, { merge: true });
-  } catch(_) {}
-}
-async function removePresence(user) {
-  if (!user) return;
-  try {
-    await updateDoc(doc(db, 'presence', user.uid), { online: false, lastSeen: serverTimestamp() });
-  } catch(_) {}
-}
-
-// Listen to presence
-onSnapshot(collection(db, 'presence'), snap => {
-  onlineMembers = {};
-  snap.docs.forEach(d => {
-    const data = d.data();
-    if (data.online) onlineMembers[d.id] = data;
-  });
-  renderMembers();
-  const count = Object.keys(onlineMembers).length;
-  document.getElementById('stat-users').textContent = count;
-  document.getElementById('online-badge').textContent = `(${count})`;
-  document.getElementById('chat-member-count').textContent = `${count} membre${count!==1?'s':''} connecté${count!==1?'s':''}`;
-});
-
-function renderMembers() {
-  const list = document.getElementById('members-list');
-  const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
-  const members = Object.values(onlineMembers);
-  if (members.length === 0) {
-    list.innerHTML = `<p style="font-size:0.8rem;color:var(--text-3);">Aucun membre connecté.</p>`;
-    return;
-  }
-  list.innerHTML = members.map(m => {
-    const isMe = currentUser && m.uid === currentUser.uid;
-    const mIsAdmin = m.email === ADMIN_EMAIL;
-    const avatarHtml = m.photoURL
-      ? `<img src="${escHtml(m.photoURL)}" alt="avatar" />`
-      : getInitials(m.displayName);
-    const banBtn = isAdmin && !isMe && !mIsAdmin
-      ? `<button class="ban-btn" onclick="banUser('${escHtml(m.uid)}','${escHtml(m.displayName)}')">Ban</button>`
-      : '';
-    return `<div class="member-item">
-      <div class="member-avatar">${avatarHtml}<div class="member-online-dot"></div></div>
-      <div class="member-info">
-        <div class="member-name">${escHtml(m.displayName)}${isMe?' (moi)':''} ${mIsAdmin?'<span class="member-admin-tag">Admin</span>':''}</div>
-        <div class="member-role">${escHtml(m.email)}</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Nom du produit *</label>
+        <input type="text" class="form-input" id="p-name" placeholder="Ex: Oud Royal, Rose d'Orient…">
       </div>
-      ${banBtn}
-    </div>`;
-  }).join('');
-}
-
-// ─── BANNED USERS ─────────────────────────────────────────────────
-onSnapshot(collection(db, 'banned'), snap => {
-  bannedUsers = new Set(snap.docs.map(d => d.id));
-});
-
-window.banUser = async function(uid, name) {
-  if (!currentUser || currentUser.email !== ADMIN_EMAIL) { showToast('Accès refusé.', 'error'); return; }
-  if (!confirm(`Bannir ${name} ? L'utilisateur ne pourra plus envoyer de messages ni publier de documents.`)) return;
-  try {
-    await setDoc(doc(db, 'banned', uid), { bannedAt: serverTimestamp(), bannedBy: ADMIN_EMAIL });
-    // remove their presence
-    await updateDoc(doc(db, 'presence', uid), { online: false });
-    showToast(`${name} a été banni.`, 'success');
-  } catch(e) { showToast('Erreur : ' + e.message, 'error'); }
-};
-
-// ─── AUTH ─────────────────────────────────────────────────────────
-onAuthStateChanged(auth, async user => {
-  currentUser = user;
-  const loggedIn = !!user;
-  const isAdmin  = user && user.email === ADMIN_EMAIL;
-
-  document.getElementById('btn-google-login').style.display = loggedIn ? 'none' : '';
-  document.getElementById('btn-logout').style.display       = loggedIn ? '' : 'none';
-  document.getElementById('user-pill').style.display        = loggedIn ? 'flex' : 'none';
-  document.getElementById('btn-add-doc').style.display      = loggedIn ? '' : 'none';
-  document.getElementById('admin-badge').style.display      = isAdmin ? '' : 'none';
-
-  const heroBanner = document.getElementById('hero-connect-banner');
-  if (heroBanner) heroBanner.style.display = loggedIn ? 'none' : '';
-
-  if (user) {
-    closeModal('modal-auth');
-
-    // Check if banned
-    const banSnap = await getDoc(doc(db, 'banned', user.uid));
-    if (banSnap.exists()) {
-      await signOut(auth);
-      showToast('Votre accès a été révoqué par un administrateur.', 'error');
-      return;
-    }
-
-    const avEl = document.getElementById('user-avatar');
-    if (user.photoURL) {
-      avEl.innerHTML = `<img src="${user.photoURL}" alt="avatar" />`;
-    } else {
-      avEl.textContent = getInitials(user.displayName || user.email);
-    }
-    document.getElementById('user-name').textContent = user.displayName || user.email.split('@')[0];
-    document.getElementById('chat-input-wrap').style.display   = 'flex';
-    document.getElementById('chat-login-notice').style.display = 'none';
-    setPresence(user);
-
-    // Remove presence on tab close
-    window.addEventListener('beforeunload', () => removePresence(user));
-  } else {
-    document.getElementById('chat-input-wrap').style.display   = 'none';
-    document.getElementById('chat-login-notice').style.display = '';
-  }
-
-  renderMembers();
-  renderDocs();
-  hideSpinner();
-});
-
-window.loginWithGoogle = async function() {
-  try {
-    await signInWithPopup(auth, googleProvider);
-    showToast('Connexion réussie ! Bienvenue 🎉', 'success');
-  } catch(e) {
-    if (e.code !== 'auth/popup-closed-by-user') showToast('Erreur : ' + e.message, 'error');
-  }
-};
-window.logout = async function() {
-  if (currentUser) await removePresence(currentUser);
-  await signOut(auth);
-  showToast('Déconnexion effectuée.', 'info');
-};
-
-// ─── LIBRARY (Collection: library) ───────────────────────────────
-const libCol   = collection(db, 'library');
-const libQuery = query(libCol, orderBy('timestamp', 'desc'));
-
-onSnapshot(libQuery, snap => {
-  allDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  document.getElementById('stat-docs').textContent      = allDocs.length;
-  document.getElementById('tab-docs-count').textContent = allDocs.length;
-  filterDocs();
-});
-
-window.filterDocs = function() {
-  const q     = (document.getElementById('search-input').value || '').toLowerCase();
-  const promo = document.getElementById('filter-promo').value;
-  const type  = document.getElementById('filter-type').value;
-  const filtered = allDocs.filter(d => {
-    const matchQ = !q || (d.title||'').toLowerCase().includes(q) || (d.category||'').toLowerCase().includes(q);
-    let matchT = true;
-    if (type) matchT = docType(d.url) === type;
-    return matchQ && (!promo || d.category === promo) && matchT;
-  });
-  document.getElementById('doc-count-label').innerHTML = `<i class="fa-solid fa-layer-group"></i> ${filtered.length} / ${allDocs.length} résultats`;
-  renderDocs(filtered);
-};
-
-function renderDocs(docs) {
-  docs = docs ?? allDocs;
-  const grid    = document.getElementById('lib-grid');
-  const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
-
-  if (docs.length === 0) {
-    grid.innerHTML = `<div class="empty-state">
-      <i class="fa-solid fa-photo-film empty-icon"></i>
-      <p>Aucun document trouvé.</p>
-      <p class="hint">${currentUser ? 'Soyez le premier à publier une ressource !' : 'Connectez-vous pour publier.'}</p>
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML = docs.map(d => {
-    const type     = docType(d.url);
-    const likedBy  = d.likedBy || [];
-    const likeCount = likedBy.length;
-    const isLiked  = currentUser && likedBy.includes(currentUser.uid);
-    const delBtn   = isAdmin ? `<button class="lib-admin-del" title="Supprimer" onclick="deleteLibDoc('${d.id}')"><i class="fa-solid fa-trash"></i></button>` : '';
-
-    // Media preview
-    let mediaHtml = '';
-    if (type === 'Image') {
-      mediaHtml = `<img class="lib-card-media" src="${escHtml(d.url)}" alt="${escHtml(d.title)}" onerror="this.outerHTML='<div class=\\'lib-card-media-icon img\\'><i class=\\'fa-solid fa-image\\'></i><span>Image</span></div>'" />`;
-    } else if (type === 'PDF') {
-      mediaHtml = `<div class="lib-card-media-icon pdf"><i class="fa-solid fa-file-pdf"></i><span>PDF</span></div>`;
-    } else if (type === 'Docx') {
-      mediaHtml = `<div class="lib-card-media-icon docx"><i class="fa-solid fa-file-word"></i><span>Word / Docx</span></div>`;
-    } else {
-      mediaHtml = `<div class="lib-card-media-icon link"><i class="fa-solid fa-link"></i><span>Lien externe</span></div>`;
-    }
-
-    return `<article class="lib-card">
-      ${delBtn}
-      ${mediaHtml}
-      <div class="lib-card-body">
-        <div class="lib-card-title">${escHtml(d.title)}</div>
-        <div class="lib-card-meta">
-          <span class="lib-card-promo"><i class="fa-solid fa-graduation-cap"></i> ${escHtml(d.category || '—')}</span>
-          <span class="lib-card-date">${fmtDate(d.timestamp)}</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">Prix ($) *</label>
+          <input type="number" class="form-input" id="p-price" placeholder="Ex: 3" min="0.5" step="0.5">
         </div>
-        <div class="lib-card-author"><i class="fa-solid fa-user-pen"></i> ${escHtml((d.authorEmail||'').split('@')[0])}</div>
+        <div class="form-group">
+          <label class="form-label">Catégorie *</label>
+          <select class="form-select" id="p-cat">
+            <option value="">Choisir…</option>
+            <option value="filles">Filles</option>
+            <option value="garçons">Garçons</option>
+            <option value="mixte">Mixte</option>
+          </select>
+        </div>
       </div>
-      <div class="lib-card-actions">
-        <button class="lib-action-btn ${isLiked?'liked':''}" onclick="toggleLike('${d.id}','${escHtml(d.title)}')">
-          <i class="fa-${isLiked?'solid':'regular'} fa-heart"></i>
-          <span class="like-count">${likeCount > 0 ? likeCount : 'J\'aime'}</span>
-        </button>
-        <button class="lib-action-btn" onclick="openViewer('${d.id}','${escHtml(d.title)}','${escHtml(d.url||'')}','${escHtml(d.authorEmail||'')}','${fmtDate(d.timestamp)}')">
-          <i class="fa-solid fa-book-open"></i>
-          <span>Lire</span>
-        </button>
-        <a href="${escHtml(d.url||'#')}" target="_blank" rel="noopener" download style="flex:1;display:flex;">
-          <button class="lib-action-btn" style="flex:1;">
-            <i class="fa-solid fa-download"></i>
-            <span>Télécharger</span>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="p-desc" placeholder="Décrivez votre parfum : notes, durée, occasion…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Numéro WhatsApp *</label>
+        <input type="tel" class="form-input" id="p-phone" placeholder="+243 xxx xxx xxx">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Photo du produit</label>
+
+        <!-- Tabs URL / Fichier -->
+        <div style="display:flex;gap:0;margin-bottom:12px;border:1px solid var(--glass-border);border-radius:var(--radius-sm);overflow:hidden">
+          <button type="button" id="tab-url" onclick="switchImgTab('url')"
+            style="flex:1;padding:9px 12px;border:none;background:rgba(201,168,76,0.15);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Lien URL
           </button>
-        </a>
-        <button class="lib-action-btn" onclick="shareDoc('${escHtml(d.url||'')}')">
-          <i class="fa-solid fa-share-nodes"></i>
+          <button type="button" id="tab-file" onclick="switchImgTab('file')"
+            style="flex:1;padding:9px 12px;border:none;background:var(--glass);color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.83rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Uploader un fichier
+          </button>
+        </div>
+
+        <!-- Panel URL (actif par défaut) -->
+        <div id="panel-url">
+          <div style="position:relative">
+            <input type="url" class="form-input" id="p-image-url"
+              placeholder="https://example.com/mon-parfum.jpg"
+              oninput="previewImageUrl(this.value)"
+              style="padding-right:44px">
+            <button type="button" onclick="clearImageUrl()"
+              style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;display:flex;align-items:center">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:6px;line-height:1.5">
+            Collez l'URL directe d'une image en ligne (Google Images, Unsplash, Drive public, etc.)
+          </p>
+          <!-- Statut validation URL -->
+          <div id="url-status" style="display:none;margin-top:8px;font-size:0.78rem;padding:8px 12px;border-radius:8px"></div>
+        </div>
+
+        <!-- Panel Fichier (masqué par défaut) -->
+        <div id="panel-file" style="display:none">
+          <div class="img-upload-area" id="upload-area">
+            <input type="file" id="p-image" accept="image/*" onchange="previewImage(this)">
+            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--text-muted);margin:0 auto"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <p>Cliquer pour uploader une photo</p>
+          </div>
+        </div>
+
+        <!-- Prévisualisation unifiée -->
+        <div id="img-preview-wrap" style="display:none;margin-top:12px;position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--glass-border)">
+          <img id="img-preview" src="" alt="Aperçu" style="width:100%;max-height:200px;object-fit:cover;display:block">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent);display:flex;align-items:flex-end;padding:10px 12px">
+            <span style="font-size:0.75rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:5px">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Aperçu de l'image
+            </span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" id="btn-submit-product" onclick="publishProduct()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Publier mon parfum
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PRODUCT DETAIL MODAL ─── -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="detail-modal-title">Détails du produit</h3>
+      <button class="modal-close" onclick="closeModal('detail-modal')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="detail-modal-body"></div>
+  </div>
+</div>
+
+<!-- ─── TOAST CONTAINER ─── -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ─── FIREBASE SDK ─── -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, deleteUser
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  query, orderBy, serverTimestamp, onSnapshot, where
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getStorage, ref, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+/* ─── CONFIG ─── */
+const firebaseConfig = {
+  apiKey: "AIzaSyBL42lIY-JdPoX-khGdIq67hMaH8EQGsaY",
+  authDomain: "luxparfum-deadd.firebaseapp.com",
+  projectId: "luxparfum-deadd",
+  storageBucket: "luxparfum-deadd.firebasestorage.app",
+  messagingSenderId: "820362684293",
+  appId: "1:820362684293:web:572ee71e1e00b450ba46ec"
+};
+const ADMIN_EMAIL = "scizabalola@gmail.com";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const provider = new GoogleAuthProvider();
+
+/* ─── STATE ─── */
+let currentUser = null;
+let currentUserData = null;
+let allProducts = [];
+let currentFilter = "all";
+let currentView = "grid";  // "grid" | "fullscreen"
+let favorites = JSON.parse(localStorage.getItem("lp_favs") || "[]");
+
+/* ──────────────────────────────────────
+   DARK / LIGHT THEME
+────────────────────────────────────── */
+const savedTheme = localStorage.getItem("lp_theme") || "dark";
+document.documentElement.setAttribute("data-theme", savedTheme);
+
+window.toggleTheme = () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("lp_theme", next);
+};
+
+/* ─── HELPERS ─── */
+window.toast = (msg, type = "success") => {
+  const c = document.getElementById("toast-container");
+  const t = document.createElement("div");
+  t.className = `toast ${type}`;
+  const icon = type === "success"
+    ? `<svg width="16" height="16" fill="none" stroke="#25D366" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
+    : `<svg width="16" height="16" fill="none" stroke="#e05c5c" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  t.innerHTML = `${icon}<span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+};
+
+window.closeModal = id => document.getElementById(id).classList.remove("open");
+const openModal  = id => document.getElementById(id).classList.add("open");
+
+window.toggleUserMenu = () => {
+  document.getElementById("user-dropdown").classList.toggle("open");
+};
+document.addEventListener("click", e => {
+  const wrap = document.getElementById("user-menu-wrap");
+  if (wrap && !wrap.contains(e.target))
+    document.getElementById("user-dropdown")?.classList.remove("open");
+});
+
+/* ─── BADGE LOGIC ─── */
+const getBadge = (createdAt) => {
+  if (!createdAt) return "new";
+  const diff = Date.now() - (createdAt.toMillis?.() || 0);
+  if (diff < 2 * 24 * 3600 * 1000) return "new";
+  return Math.random() > 0.6 ? "best" : "promo";
+};
+
+const badgeHTML = (type) => {
+  const map = {
+    new:  `<span class="badge badge-new">Nouveau</span>`,
+    promo:`<span class="badge badge-promo">Promo</span>`,
+    best: `<span class="badge badge-best">Best Seller</span>`
+  };
+  return map[type] || "";
+};
+
+const starsHTML = (n = 4) =>
+  `<svg width="60" height="12" viewBox="0 0 60 12" fill="none" xmlns="http://www.w3.org/2000/svg">${
+    [0,12,24,36,48].map((x,i)=>
+      `<path d="M${x+6} 1l1.545 3.13L${x+11.5} 4.854l-2.25 2.193.531 3.095L${x+6} 8.635l-3.781 1.507.531-3.095L${x+0.5} 4.854l3.955-.724L${x+6} 1z" fill="${i<n?'#c9a84c':'none'}" stroke="#c9a84c" stroke-width="0.8"/>`
+    ).join('')
+  }</svg>`;
+
+const waIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.523 5.845L0 24l6.341-1.506A11.935 11.935 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.81 9.81 0 0 1-5.002-1.368l-.36-.213-3.726.885.939-3.618-.235-.373A9.818 9.818 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>`;
+
+/* ─── GRID PRODUCT CARD ─── */
+const buildCard = (p, isAdmin = false) => {
+  const isOwner = currentUser && currentUser.email === p.ownerEmail;
+  const isFav = favorites.includes(p.id);
+  const badge = getBadge(p.createdAt);
+  const avatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.ownerName||'V')}&background=c9a84c&color=0a0806`;
+
+  // Use imageURL from Firestore (field may be imageURL or imageUrl)
+  const imgUrl = p.imageURL || p.imageUrl || "";
+  const imgContent = imgUrl
+    ? `<img src="${imgUrl}" alt="${p.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\'product-img-placeholder\\'><svg width=\\'40\\' height=\\'40\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\' viewBox=\\'0 0 24 24\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/><circle cx=\\'8.5\\' cy=\\'8.5\\' r=\\'1.5\\'/><polyline points=\\'21 15 16 10 5 21\\'/></svg><span>Pas d\\'image</span></div>'">`
+    : `<div class="product-img-placeholder"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Pas d'image</span></div>`;
+
+  const whatsappMsg = encodeURIComponent(`Bonjour ! Je suis intéressé(e) par :\n*${p.name}* — ${p.price}$\n\nPouvez-vous me donner plus d'infos ?`);
+  const waLink = `https://wa.me/${p.phone?.replace(/\D/g, '')}?text=${whatsappMsg}`;
+
+  const ownerActions = (isOwner || isAdmin) ? `
+    <button class="btn-delete-product" onclick="deleteProduct('${p.id}', event)">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      Supprimer
+    </button>` : "";
+
+  const heartIcon = isFav
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="#e05c5c" stroke="#e05c5c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
+    : `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+
+  return `
+    <div class="product-card" style="animation-delay:${Math.random()*0.3}s" data-id="${p.id}">
+      <div class="product-img-wrap" onclick="openDetail('${p.id}')">
+        ${imgContent}
+        ${badgeHTML(badge)}
+        <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', event)">${heartIcon}</button>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">${p.category || "Parfum"}</div>
+        <div class="product-name" title="${p.name}">${p.name}</div>
+        <div class="product-desc">${p.description || "Un parfum exquis pour sublimer votre personnalité."}</div>
+        <div class="stars">${starsHTML()}</div>
+        <div class="product-footer">
+          <div class="product-price">${p.price}$</div>
+          <div style="text-align:right">
+            <div style="font-size:0.7rem;color:var(--text-muted)">Bukavu</div>
+            <div style="font-size:0.7rem;color:var(--text-muted)">Livraison 24-48h</div>
+          </div>
+        </div>
+        <div class="seller-info">
+          <img class="seller-avatar" src="${p.ownerPhoto || avatarFallback}" alt="">
+          <span class="seller-name">${p.ownerName || "Vendeur"}</span>
+          <span class="verified-badge">Vérifié</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn-whatsapp-card" href="${waLink}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            ${waIcon} Discuter le prix
+          </a>
+          <button class="btn-detail" onclick="openDetail('${p.id}')">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        ${ownerActions}
+      </div>
+    </div>`;
+};
+
+/* ══════════════════════════════════════════════
+   FULLSCREEN TIKTOK-STYLE VIEW
+══════════════════════════════════════════════ */
+let fsProducts = [];
+let fsCurrentIndex = 0;
+
+const buildFsSlide = (p, index, total) => {
+  const imgUrl = p.imageURL || p.imageUrl || "";
+  const badge = getBadge(p.createdAt);
+  const isFav = favorites.includes(p.id);
+  const avatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.ownerName||'V')}&background=c9a84c&color=0a0806`;
+  const whatsappMsg = encodeURIComponent(`Bonjour ! Je suis intéressé(e) par :\n*${p.name}* — ${p.price}$\nBukavu — LuxParfum\n\nPouvez-vous me donner plus d'infos ?`);
+  const waLink = `https://wa.me/${p.phone?.replace(/\D/g, '')}?text=${whatsappMsg}`;
+
+  const imgLayer = imgUrl
+    ? `<div class="fs-img-bg"><img src="${imgUrl}" alt="${p.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\'fs-placeholder-bg\\'><div class=\\'fs-placeholder-icon\\'><svg width=\\'36\\' height=\\'36\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\' viewBox=\\'0 0 24 24\\'><path d=\\'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5\\'/></svg></div><div class=\\'fs-placeholder-text\\'>Aucune image</div></div>'"></div>`
+    : `<div class="fs-img-bg"><div class="fs-placeholder-bg"><div class="fs-placeholder-icon"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="fs-placeholder-text">Image non disponible</div></div></div>`;
+
+  const badgeClass = badge === "new" ? "fs-badge-new" : badge === "promo" ? "fs-badge-promo" : "fs-badge-best";
+  const badgeLabel = badge === "new" ? "Nouveau" : badge === "promo" ? "Promotion" : "Best Seller";
+
+  const heartFill = isFav ? "#e05c5c" : "none";
+  const heartStroke = isFav ? "#e05c5c" : "rgba(255,255,255,0.9)";
+
+  return `
+    <div class="fs-slide" data-id="${p.id}" data-index="${index}">
+      ${imgLayer}
+      <div class="fs-overlay"></div>
+
+      <!-- Progress bar -->
+      <div class="fs-progress">
+        <div class="fs-progress-bar" style="width:${((index+1)/total)*100}%"></div>
+      </div>
+
+      <!-- Top bar -->
+      <div class="fs-topbar">
+        <span class="fs-counter">${index + 1} / ${total}</span>
+        <button class="fs-close-btn" onclick="closeFsView()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Right sidebar actions -->
+      <div class="fs-sidebar">
+        <button class="fs-action-btn ${isFav ? 'active' : ''}" onclick="toggleFavFs('${p.id}', this)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="${heartFill}" stroke="${heartStroke}" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span>Sauver</span>
+        </button>
+        <button class="fs-action-btn" onclick="openDetail('${p.id}')">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Détails</span>
+        </button>
+        <button class="fs-action-btn" onclick="shareProduct('${p.id}','${p.name}')">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
           <span>Partager</span>
         </button>
       </div>
-    </article>`;
-  }).join('');
-}
 
-// Like / Unlike
-window.toggleLike = async function(docId, title) {
-  if (!currentUser) { showToast('Connectez-vous pour liker.', 'error'); return; }
-  const ref      = doc(db, 'library', docId);
-  const snap     = await getDoc(ref);
-  if (!snap.exists()) return;
-  const likedBy  = snap.data().likedBy || [];
-  const uid      = currentUser.uid;
-  if (likedBy.includes(uid)) {
-    await updateDoc(ref, { likedBy: arrayRemove(uid) });
+      <!-- Bottom info -->
+      <div class="fs-info">
+        <div class="fs-badge ${badgeClass}">${badgeLabel}</div>
+        <div class="fs-category">${p.category || "Parfum"} · Bukavu</div>
+        <div class="fs-name">${p.name}</div>
+        <div class="fs-price">${p.price} USD</div>
+        <div class="fs-desc">${p.description || "Un parfum exquis pour sublimer votre personnalité."}</div>
+        <div class="fs-seller">
+          <img class="fs-seller-avatar" src="${p.ownerPhoto || avatarFallback}" alt="">
+          <div>
+            <div class="fs-seller-name">${p.ownerName || "Vendeur"}</div>
+            <div class="fs-seller-sub">Vendeur vérifié · Bukavu</div>
+          </div>
+        </div>
+        <a class="fs-whatsapp-btn" href="${waLink}" target="_blank" rel="noopener">
+          ${waIcon}
+          Discuter sur WhatsApp
+        </a>
+      </div>
+    </div>`;
+};
+
+const renderFsView = () => {
+  const container = document.getElementById("fs-scroll-container");
+  fsProducts = allProducts.filter(p => {
+    const matchFilter = currentFilter === "all" || p.category === currentFilter;
+    return matchFilter;
+  });
+  if (!fsProducts.length) {
+    container.innerHTML = `<div style="height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;color:rgba(255,255,255,0.5)"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>Aucun produit disponible</p></div>`;
+    return;
+  }
+  container.innerHTML = fsProducts.map((p, i) => buildFsSlide(p, i, fsProducts.length)).join("");
+
+  // Scroll progress tracking
+  container.addEventListener("scroll", onFsScroll, { passive: true });
+};
+
+const onFsScroll = () => {
+  const container = document.getElementById("fs-scroll-container");
+  const slideH = window.innerHeight;
+  const idx = Math.round(container.scrollTop / slideH);
+  fsCurrentIndex = idx;
+};
+
+/* ─── TOGGLE BETWEEN VIEWS ─── */
+window.switchView = (view) => {
+  currentView = view;
+  const fsDiv = document.getElementById("fullscreen-view");
+  const mainContent = document.getElementById("main-content");
+
+  if (view === "fullscreen") {
+    renderFsView();
+    fsDiv.style.display = "block";
+    document.body.style.overflow = "hidden";
+    document.getElementById("btn-grid-view")?.classList.remove("active");
+    document.getElementById("btn-fs-view")?.classList.add("active");
+    document.getElementById("mob-fs")?.classList.add("active");
+    document.getElementById("mob-home")?.classList.remove("active");
   } else {
-    await updateDoc(ref, { likedBy: arrayUnion(uid) });
+    fsDiv.style.display = "none";
+    document.body.style.overflow = "";
+    document.getElementById("btn-grid-view")?.classList.add("active");
+    document.getElementById("btn-fs-view")?.classList.remove("active");
+    document.getElementById("mob-home")?.classList.add("active");
+    document.getElementById("mob-fs")?.classList.remove("active");
   }
 };
 
-// Share
-window.shareDoc = function(url) {
-  if (!url) return;
-  navigator.clipboard.writeText(url).then(() => showToast('Lien copié dans le presse-papiers ! 🔗', 'success')).catch(() => showToast('Impossible de copier le lien.', 'error'));
+window.closeFsView = () => switchView("grid");
+
+/* ─── FAV FROM FULLSCREEN ─── */
+window.toggleFavFs = (id, btn) => {
+  const i = favorites.indexOf(id);
+  if (i > -1) {
+    favorites.splice(i, 1);
+    btn.classList.remove("active");
+    btn.querySelector("svg").setAttribute("fill", "none");
+    btn.querySelector("svg").setAttribute("stroke", "rgba(255,255,255,0.9)");
+  } else {
+    favorites.push(id);
+    btn.classList.add("active");
+    btn.querySelector("svg").setAttribute("fill", "#e05c5c");
+    btn.querySelector("svg").setAttribute("stroke", "#e05c5c");
+  }
+  localStorage.setItem("lp_favs", JSON.stringify(favorites));
+  toast(i > -1 ? "Retiré des favoris" : "Ajouté aux favoris");
 };
 
-// Delete library doc (admin)
-window.deleteLibDoc = async function(id) {
-  if (!currentUser || currentUser.email !== ADMIN_EMAIL) { showToast('Accès refusé.', 'error'); return; }
-  if (!confirm('Supprimer ce document définitivement ?')) return;
+/* ─── SHARE ─── */
+window.shareProduct = (id, name) => {
+  const url = `https://luxparfum.app/p/${id}`;
+  if (navigator.share) {
+    navigator.share({ title: name, url }).catch(() => {});
+  } else {
+    navigator.clipboard?.writeText(url);
+    toast("Lien copié !");
+  }
+};
+
+/* ─── RENDER PRODUCTS (GRID) ─── */
+window.renderProducts = () => {
+  const grid = document.getElementById("products-grid");
+  const search = document.getElementById("search-input")?.value.toLowerCase() || "";
+  const sort = document.getElementById("sort-select")?.value || "recent";
+
+  let filtered = allProducts.filter(p => {
+    const matchFilter = currentFilter === "all" || p.category === currentFilter;
+    const matchSearch = !search || p.name?.toLowerCase().includes(search) || p.description?.toLowerCase().includes(search);
+    return matchFilter && matchSearch;
+  });
+
+  if (sort === "price-asc") filtered.sort((a, b) => a.price - b.price);
+  else if (sort === "price-desc") filtered.sort((a, b) => b.price - a.price);
+  else filtered.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+
+  document.getElementById("stat-products").textContent = allProducts.length + "+";
+  const sellers = [...new Set(allProducts.map(p => p.ownerEmail))].length;
+  document.getElementById("stat-sellers").textContent = sellers + "+";
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-state-icon"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <h3>Aucun produit trouvé</h3>
+      <p style="color:var(--text-muted)">Essayez un autre filtre ou soyez le premier à publier !</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(p => buildCard(p)).join("");
+};
+
+/* ─── LOAD PRODUCTS ─── */
+const loadProducts = () => {
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+  onSnapshot(q, snap => {
+    allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderProducts();
+    if (currentView === "fullscreen") renderFsView();
+  });
+};
+
+/* ─── FILTER ─── */
+window.setFilter = (filter, el) => {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+  el.classList.add("active");
+  renderProducts();
+};
+
+/* ─── SEARCH ─── */
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("search-input")?.addEventListener("input", renderProducts);
+});
+
+/* ─── FAVORITES (GRID) ─── */
+window.toggleFav = (id, e) => {
+  e.stopPropagation();
+  const i = favorites.indexOf(id);
+  if (i > -1) favorites.splice(i, 1);
+  else favorites.push(id);
+  localStorage.setItem("lp_favs", JSON.stringify(favorites));
+  renderProducts();
+  if (document.getElementById("page-favorites").style.display !== "none") renderFavorites();
+};
+
+const renderFavorites = () => {
+  const grid = document.getElementById("favorites-grid");
+  const fav = allProducts.filter(p => favorites.includes(p.id));
+  if (!fav.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-state-icon"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <h3>Aucun favori</h3><p style="color:var(--text-muted)">Ajoutez des parfums à vos favoris en cliquant sur le cœur.</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = fav.map(p => buildCard(p)).join("");
+};
+
+/* ─── PAGE SWITCHING ─── */
+window.showMarketplace = () => {
+  if (currentView === "fullscreen") closeFsView();
+  document.getElementById("page-marketplace").style.display = "block";
+  document.getElementById("page-favorites").style.display = "none";
+  document.getElementById("page-admin").style.display = "none";
+  document.getElementById("mob-home")?.classList.add("active");
+  document.getElementById("mob-favs")?.classList.remove("active");
+  document.getElementById("user-dropdown")?.classList.remove("open");
+};
+
+window.showFavorites = () => {
+  if (!currentUser) { showAuthModal(); return; }
+  if (currentView === "fullscreen") closeFsView();
+  document.getElementById("page-marketplace").style.display = "none";
+  document.getElementById("page-favorites").style.display = "block";
+  document.getElementById("page-admin").style.display = "none";
+  document.getElementById("mob-home")?.classList.remove("active");
+  document.getElementById("mob-favs")?.classList.add("active");
+  document.getElementById("user-dropdown")?.classList.remove("open");
+  renderFavorites();
+};
+
+window.showAdmin = () => {
+  if (currentView === "fullscreen") closeFsView();
+  document.getElementById("page-marketplace").style.display = "none";
+  document.getElementById("page-favorites").style.display = "none";
+  document.getElementById("page-admin").style.display = "block";
+  document.getElementById("user-dropdown")?.classList.remove("open");
+  loadAdminData();
+};
+
+/* ─── AUTH ─── */
+window.showAuthModal = () => openModal("auth-modal");
+
+window.handleGoogleLogin = async () => {
   try {
-    await deleteDoc(doc(db, 'library', id));
-    showToast('Document supprimé.', 'success');
-  } catch(e) { showToast('Erreur : ' + e.message, 'error'); }
-};
-
-// Viewer
-window.openViewer = async function(id, title, url, authorEmail, date) {
-  document.getElementById('viewer-title').textContent = title;
-  document.getElementById('viewer-meta').innerHTML = `<i class="fa-solid fa-user-pen" style="color:var(--gold)"></i> ${escHtml(authorEmail||'—')} · ${date}`;
-  document.getElementById('viewer-open').href     = url || '#';
-  document.getElementById('viewer-download').href = url || '#';
-  const wrap = document.getElementById('viewer-frame-wrap');
-  if (!url) {
-    wrap.innerHTML = `<p style="color:var(--text-3);text-align:center;padding:40px;">Aucun lien disponible.</p>`;
-  } else if (isImageUrl(url)) {
-    wrap.innerHTML = `<img src="${escHtml(url)}" class="viewer-img" alt="${escHtml(title)}" />`;
-  } else {
-    wrap.innerHTML = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true" class="viewer-frame" title="${escHtml(title)}" allowfullscreen></iframe>`;
+    const result = await signInWithPopup(auth, provider);
+    const u = result.user;
+    const userRef = doc(db, "users", u.uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists()) {
+      await setDoc(userRef, {
+        name: u.displayName, email: u.email, photoURL: u.photoURL,
+        role: u.email === ADMIN_EMAIL ? "admin" : "user",
+        blocked: false, createdAt: serverTimestamp()
+      });
+    }
+    closeModal("auth-modal");
+    toast("Bienvenue " + u.displayName.split(" ")[0] + " !");
+  } catch (err) {
+    toast("Erreur de connexion : " + err.message, "error");
   }
-  openModal('modal-viewer');
-  try { await updateDoc(doc(db,'library',id), { vues: increment(1) }); } catch(_) {}
 };
 
-// Publish document → collection: library
-window.publishDocument = async function() {
-  if (!currentUser) { showToast('Connectez-vous pour publier.', 'error'); return; }
-  if (bannedUsers.has(currentUser.uid)) { showToast('Votre accès a été révoqué.', 'error'); return; }
-  const btn      = document.getElementById('publish-btn');
-  const title    = document.getElementById('doc-title').value.trim();
-  const url      = document.getElementById('doc-url').value.trim();
-  const category = document.getElementById('doc-category').value;
-  if (!title)    { showToast('Le titre est obligatoire.', 'error'); return; }
-  if (!category) { showToast('Choisissez une promotion.', 'error'); return; }
-  if (!url)      { showToast("Veuillez saisir l'URL du document.", 'error'); return; }
-  if (!url.startsWith('http')) { showToast('URL invalide. Elle doit commencer par http(s)://', 'error'); return; }
+window.handleLogout = async () => {
+  await signOut(auth);
+  document.getElementById("user-dropdown")?.classList.remove("open");
+  showMarketplace();
+  toast("Déconnecté avec succès.");
+};
+
+window.handleDeleteAccount = async () => {
+  if (!confirm("Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.")) return;
+  try {
+    const q = query(collection(db, "products"), where("ownerEmail", "==", currentUser.email));
+    const snap = await getDocs(q);
+    for (const d of snap.docs) await deleteDoc(doc(db, "products", d.id));
+    await deleteDoc(doc(db, "users", currentUser.uid));
+    await deleteUser(currentUser);
+    toast("Compte supprimé.");
+  } catch (err) {
+    toast("Erreur : reconnectez-vous d'abord.", "error");
+  }
+};
+
+/* ─── AUTH STATE ─── */
+onAuthStateChanged(auth, async (u) => {
+  document.getElementById("full-loader").style.display = "none";
+  document.getElementById("navbar").style.display = "flex";
+  document.getElementById("main-content").style.display = "block";
+
+  if (u) {
+    currentUser = u;
+    const snap = await getDoc(doc(db, "users", u.uid));
+    currentUserData = snap.exists() ? snap.data() : {};
+
+    document.getElementById("btn-login").style.display = "none";
+    document.getElementById("btn-publish").style.display = currentUserData.blocked ? "none" : "flex";
+    document.getElementById("user-menu-wrap").style.display = "flex";
+    document.getElementById("nav-user-photo").src = u.photoURL || "";
+    document.getElementById("nav-user-name").textContent = u.displayName?.split(" ")[0] || "Moi";
+    document.getElementById("user-menu-btn").style.display = "flex";
+    document.getElementById("mobile-nav").style.display = "flex";
+
+    const mobLogin = document.getElementById("mob-login");
+    if (mobLogin) mobLogin.innerHTML = `<img src="${u.photoURL}" style="width:24px;height:24px;border-radius:50%;border:2px solid var(--gold)"><span>Moi</span>`;
+
+    if (u.email === ADMIN_EMAIL) {
+      document.getElementById("btn-admin-panel").style.display = "flex";
+    }
+    loadProducts();
+  } else {
+    currentUser = null;
+    currentUserData = null;
+    document.getElementById("btn-login").style.display = "flex";
+    document.getElementById("btn-publish").style.display = "none";
+    document.getElementById("user-menu-wrap").style.display = "none";
+    document.getElementById("mobile-nav").style.display = "flex";
+    loadProducts();
+  }
+});
+
+/* ─── PUBLISH MODAL ─── */
+window.openPublishModal = () => {
+  if (!currentUser) { showAuthModal(); return; }
+  if (currentUserData?.blocked) { toast("Votre compte est bloqué par l'admin.", "error"); return; }
+  openModal("publish-modal");
+};
+
+/* ─── IMAGE TAB SWITCHER ─── */
+let currentImgTab = "url"; // "url" | "file"
+
+window.switchImgTab = (tab) => {
+  currentImgTab = tab;
+  const tabUrl  = document.getElementById("tab-url");
+  const tabFile = document.getElementById("tab-file");
+  const panelUrl  = document.getElementById("panel-url");
+  const panelFile = document.getElementById("panel-file");
+
+  if (tab === "url") {
+    tabUrl.style.background  = "rgba(201,168,76,0.15)"; tabUrl.style.color  = "var(--gold)"; tabUrl.style.fontWeight = "600";
+    tabFile.style.background = "var(--glass)";          tabFile.style.color = "var(--text-muted)"; tabFile.style.fontWeight = "500";
+    panelUrl.style.display  = "block";
+    panelFile.style.display = "none";
+    // Clear file input preview if switching away
+    document.getElementById("p-image").value = "";
+  } else {
+    tabFile.style.background = "rgba(201,168,76,0.15)"; tabFile.style.color = "var(--gold)"; tabFile.style.fontWeight = "600";
+    tabUrl.style.background  = "var(--glass)";          tabUrl.style.color  = "var(--text-muted)"; tabUrl.style.fontWeight = "500";
+    panelFile.style.display = "block";
+    panelUrl.style.display  = "none";
+    // Clear URL input preview if switching away
+    document.getElementById("p-image-url").value = "";
+    setUrlStatus(null);
+    hidePreview();
+  }
+};
+
+const showPreview = (src) => {
+  const wrap = document.getElementById("img-preview-wrap");
+  const img  = document.getElementById("img-preview");
+  img.src = src;
+  wrap.style.display = "block";
+};
+const hidePreview = () => {
+  document.getElementById("img-preview-wrap").style.display = "none";
+  document.getElementById("img-preview").src = "";
+};
+
+const setUrlStatus = (state) => {
+  const el = document.getElementById("url-status");
+  if (!state) { el.style.display = "none"; return; }
+  el.style.display = "block";
+  if (state === "loading") {
+    el.style.background = "rgba(201,168,76,0.08)"; el.style.border = "1px solid var(--glass-border)"; el.style.color = "var(--text-muted)";
+    el.innerHTML = `<span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:50%;border:2px solid var(--glass-border);border-top-color:var(--gold);animation:spin 0.7s linear infinite;display:inline-block"></span>Vérification de l'image…</span>`;
+  } else if (state === "ok") {
+    el.style.background = "rgba(37,211,102,0.08)"; el.style.border = "1px solid rgba(37,211,102,0.25)"; el.style.color = "#25D366";
+    el.innerHTML = `<span style="display:flex;align-items:center;gap:6px"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Image chargée avec succès</span>`;
+  } else if (state === "error") {
+    el.style.background = "rgba(224,92,92,0.08)"; el.style.border = "1px solid rgba(224,92,92,0.25)"; el.style.color = "#e05c5c";
+    el.innerHTML = `<span style="display:flex;align-items:center;gap:6px"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>URL invalide ou image inaccessible</span>`;
+  }
+};
+
+let urlDebounceTimer = null;
+window.previewImageUrl = (url) => {
+  clearTimeout(urlDebounceTimer);
+  if (!url || !url.startsWith("http")) { setUrlStatus(null); hidePreview(); return; }
+  setUrlStatus("loading");
+  urlDebounceTimer = setTimeout(() => {
+    const img = new Image();
+    img.onload  = () => { showPreview(url); setUrlStatus("ok"); };
+    img.onerror = () => { hidePreview(); setUrlStatus("error"); };
+    img.src = url;
+  }, 600);
+};
+
+window.clearImageUrl = () => {
+  document.getElementById("p-image-url").value = "";
+  hidePreview(); setUrlStatus(null);
+};
+
+window.previewImage = (input) => {
+  if (input.files?.[0]) {
+    showPreview(URL.createObjectURL(input.files[0]));
+  }
+};
+
+window.publishProduct = async () => {
+  const name  = document.getElementById("p-name").value.trim();
+  const price = parseFloat(document.getElementById("p-price").value);
+  const cat   = document.getElementById("p-cat").value;
+  const desc  = document.getElementById("p-desc").value.trim();
+  const phone = document.getElementById("p-phone").value.trim();
+
+  if (!name || !price || !cat || !phone) {
+    toast("Veuillez remplir tous les champs obligatoires (*)", "error"); return;
+  }
+
+  const btn = document.getElementById("btn-submit-product");
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publication…';
+  btn.textContent = "Publication en cours…";
+
   try {
-    await addDoc(collection(db, 'library'), {
-      title, url, category,
-      authorEmail: currentUser.email,
-      likedBy:     [],
-      vues:        0,
-      timestamp:   serverTimestamp()
-    });
-    showToast('Document publié avec succès ! 🎉', 'success');
-    closeModal('modal-add-doc');
-    ['doc-title','doc-url'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
-    document.getElementById('doc-category').value = '';
-  } catch(e) {
-    showToast('Erreur : ' + e.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publier le document';
-  }
-};
+    let imageURL = "";
 
-// ─── CHAT (Collection: posts) ─────────────────────────────────────
-const postsCol   = collection(db, 'posts');
-const postsQuery = query(postsCol, orderBy('timestamp', 'asc'));
-
-onSnapshot(postsQuery, snap => {
-  const container = document.getElementById('chat-messages');
-  const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  document.getElementById('stat-msgs').textContent      = msgs.length;
-  document.getElementById('tab-chat-count').textContent = msgs.length;
-
-  const isAdmin     = currentUser && currentUser.email === ADMIN_EMAIL;
-  const wasAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 80;
-
-  container.innerHTML = '';
-  let lastDate = '';
-
-  msgs.forEach(msg => {
-    const isOwn = currentUser && msg.uid === currentUser.uid;
-    const canDel = isAdmin || isOwn;
-
-    // Date divider
-    const dayLabel = msg.timestamp ? fmtDateDivider(msg.timestamp) : '';
-    if (dayLabel && dayLabel !== lastDate) {
-      lastDate = dayLabel;
-      const divEl = document.createElement('div');
-      divEl.className = 'chat-date-divider';
-      divEl.innerHTML = `<span>${escHtml(dayLabel)}</span>`;
-      container.appendChild(divEl);
+    if (currentImgTab === "url") {
+      /* ── MODE URL : on utilise directement le lien ── */
+      const urlVal = document.getElementById("p-image-url").value.trim();
+      if (urlVal && urlVal.startsWith("http")) {
+        imageURL = urlVal;
+      }
+    } else {
+      /* ── MODE FICHIER : upload Firebase Storage ── */
+      const imgFile = document.getElementById("p-image").files?.[0];
+      if (imgFile) {
+        const imgRef = ref(storage, `products/${Date.now()}_${imgFile.name}`);
+        await uploadBytes(imgRef, imgFile);
+        imageURL = await getDownloadURL(imgRef);
+      }
     }
 
-    const el = document.createElement('div');
-    el.className = `chat-msg ${isOwn ? 'own' : 'other'}`;
-    el.dataset.msgId = msg.id;
+    await addDoc(collection(db, "products"), {
+      name, price, category: cat, description: desc, phone,
+      imageURL,
+      ownerEmail: currentUser.email,
+      ownerName:  currentUser.displayName,
+      ownerPhoto: currentUser.photoURL,
+      ownerUID:   currentUser.uid,
+      createdAt:  serverTimestamp()
+    });
 
-    const avatarHtml = !isOwn ? `<div class="msg-avatar">${msg.photoURL ? `<img src="${escHtml(msg.photoURL)}" alt="av" />` : getInitials(msg.displayName)}</div>` : '';
+    toast("Produit publié avec succès !");
+    closeModal("publish-modal");
 
-    const senderName = !isOwn ? `<span class="msg-sender-name">${escHtml(msg.displayName || 'Anonyme')}</span>` : '';
+    // Reset form
+    ["p-name","p-price","p-desc","p-phone"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("p-cat").value = "";
+    document.getElementById("p-image-url").value = "";
+    document.getElementById("p-image").value    = "";
+    hidePreview(); setUrlStatus(null);
 
-    const replyBlock = msg.replyTo
-      ? `<div class="reply-preview"><div class="reply-name">${escHtml(msg.replyTo.senderName)}</div><div class="reply-text">${escHtml(msg.replyTo.text)}</div></div>`
-      : '';
+  } catch (err) {
+    toast("Erreur : " + err.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Publier mon parfum`;
+  }
+};
 
-    const delBtn = canDel
-      ? `<button class="msg-action-btn del-msg" title="Supprimer" onclick="deletePost('${msg.id}')"><i class="fa-solid fa-trash"></i></button>`
-      : '';
-    const replyBtn = `<button class="msg-action-btn" title="Répondre" onclick="setReply('${msg.id}','${escHtml(msg.displayName||'Anonyme')}','${escHtml((msg.text||'').substring(0,80))}')"><i class="fa-solid fa-reply"></i></button>`;
+/* ─── DELETE PRODUCT ─── */
+window.deleteProduct = async (id, e) => {
+  e.stopPropagation();
+  if (!confirm("Supprimer ce produit ?")) return;
+  try {
+    await deleteDoc(doc(db, "products", id));
+    toast("Produit supprimé.");
+  } catch (err) {
+    toast("Erreur : " + err.message, "error");
+  }
+};
 
-    const banBtn = isAdmin && !isOwn
-      ? `<button class="msg-action-btn del-msg" title="Bannir l'utilisateur" onclick="banUser('${msg.uid}','${escHtml(msg.displayName||'')}')"><i class="fa-solid fa-ban"></i></button>`
-      : '';
+/* ─── DETAIL MODAL ─── */
+window.openDetail = (id) => {
+  const p = allProducts.find(x => x.id === id);
+  if (!p) return;
+  const imgUrl = p.imageURL || p.imageUrl || "";
+  const whatsappMsg = encodeURIComponent(`Bonjour ! Je suis intéressé(e) par :\n*${p.name}* — ${p.price}$\n🔗 https://luxparfum.app/p/${p.id}\n\nPouvez-vous m'aider ?`);
+  const waLink = `https://wa.me/${p.phone?.replace(/\D/g, '')}?text=${whatsappMsg}`;
+  const avatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.ownerName||'V')}&background=c9a84c&color=0a0806`;
 
-    el.innerHTML = `${avatarHtml}
-      <div class="msg-bubble">
-        ${senderName}
-        ${replyBlock}
-        <span class="msg-text">${escHtml(msg.text)}</span>
-        <div class="msg-footer">
-          <span class="msg-time">${fmtTime(msg.timestamp)}</span>
-          ${isOwn ? '<span class="msg-ticks"><i class="fa-solid fa-check-double"></i></span>' : ''}
-        </div>
+  document.getElementById("detail-modal-title").textContent = p.name;
+  document.getElementById("detail-modal-body").innerHTML = `
+    ${imgUrl ? `<img class="detail-img" src="${imgUrl}" alt="${p.name}">` : ""}
+    <div class="detail-cat">${p.category}</div>
+    <div class="detail-name">${p.name}</div>
+    <div class="detail-price">${p.price} USD</div>
+    <div class="detail-desc">${p.description || "Un parfum de qualité supérieure."}</div>
+    <div class="detail-seller">
+      <img src="${p.ownerPhoto || avatarFallback}" alt="">
+      <div>
+        <div class="detail-seller-name">${p.ownerName || "Vendeur"} <span class="verified-badge">Vérifié</span></div>
+        <div class="detail-seller-phone">${p.phone}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">Bukavu · Livraison 24-48h</div>
       </div>
-      <div class="msg-actions">${replyBtn}${delBtn}${banBtn}</div>`;
-    container.appendChild(el);
-  });
+    </div>
+    <div style="display:flex;gap:8px">
+      <a class="btn-whatsapp" href="${waLink}" target="_blank" style="text-decoration:none;flex:1">
+        ${waIcon} Discuter le prix sur WhatsApp
+      </a>
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--glass);border-radius:var(--radius-sm);border:1px solid var(--glass-border);font-size:0.8rem;color:var(--text-muted)">
+      Lien produit : <span style="color:var(--gold);word-break:break-all">https://luxparfum.app/p/${p.id}</span>
+    </div>
+  `;
+  openModal("detail-modal");
+};
 
-  if (wasAtBottom || msgs.length === 0) {
-    container.scrollTop = container.scrollHeight;
+/* ─── WHATSAPP GENERAL ─── */
+window.openWhatsAppGeneral = () => {
+  const msg = encodeURIComponent("Bonjour LuxParfum ! Je voudrais commander avec livraison à Bukavu. Pouvez-vous m'aider ?");
+  window.open(`https://wa.me/243000000000?text=${msg}`, "_blank");
+};
+
+/* ─── ADMIN ─── */
+window.showAdminTab = (tab, el) => {
+  document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("admin-tab-users").style.display = tab === "users" ? "block" : "none";
+  document.getElementById("admin-tab-products").style.display = tab === "products" ? "block" : "none";
+};
+
+const loadAdminData = async () => {
+  const usersSnap = await getDocs(collection(db, "users"));
+  const prodsSnap = await getDocs(collection(db, "products"));
+  const users = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const prods = prodsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  document.getElementById("a-stat-users").textContent = users.length;
+  document.getElementById("a-stat-products").textContent = prods.length;
+  document.getElementById("a-stat-blocked").textContent = users.filter(u => u.blocked).length;
+
+  const tbody = document.getElementById("users-tbody");
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td style="display:flex;align-items:center;gap:10px">
+        <img class="user-row-avatar" src="${u.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name||'U')}&background=c9a84c&color=0a0806`}" alt="">
+        <span>${u.name || "—"}</span>
+      </td>
+      <td style="color:var(--text-muted)">${u.email}</td>
+      <td>${u.blocked ? '<span class="blocked-tag">Bloqué</span>' : '<span class="active-tag">Actif</span>'}</td>
+      <td>
+        ${u.email !== ADMIN_EMAIL ? `
+          ${u.blocked
+            ? `<button class="btn-unblock" onclick="toggleBlock('${u.id}', false)">Débloquer</button>`
+            : `<button class="btn-block" onclick="toggleBlock('${u.id}', true)">Bloquer</button>`}
+        ` : `<span style="color:var(--gold);font-size:0.8rem">Admin</span>`}
+      </td>
+    </tr>
+  `).join("");
+
+  document.getElementById("admin-products-grid").innerHTML = prods.map(p => buildCard(p, true)).join("");
+};
+
+window.toggleBlock = async (uid, block) => {
+  try {
+    await updateDoc(doc(db, "users", uid), { blocked: block });
+    toast(block ? "Utilisateur bloqué." : "Utilisateur débloqué.");
+    loadAdminData();
+  } catch (err) {
+    toast("Erreur : " + err.message, "error");
   }
+};
+
+/* ─── CLOSE MODALS ON OVERLAY CLICK ─── */
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) overlay.classList.remove("open");
+  });
 });
 
-// Reply
-let replyData = null;
-window.setReply = function(id, senderName, text) {
-  replyData = { id, senderName, text };
-  document.getElementById('reply-bar').classList.add('active');
-  document.getElementById('reply-bar-name').textContent = senderName;
-  document.getElementById('reply-bar-text').textContent = text;
-  document.getElementById('chat-input').focus();
-};
-window.cancelReply = function() {
-  replyData = null;
-  document.getElementById('reply-bar').classList.remove('active');
-};
-
-window.sendMessage = async function() {
-  if (!currentUser) { showToast('Connectez-vous pour participer.', 'error'); return; }
-  if (bannedUsers.has(currentUser.uid)) { showToast('Votre accès a été révoqué.', 'error'); return; }
-  const input = document.getElementById('chat-input');
-  const text  = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  const payload = {
-    text,
-    uid:         currentUser.uid,
-    displayName: currentUser.displayName || currentUser.email.split('@')[0],
-    photoURL:    currentUser.photoURL || null,
-    timestamp:   serverTimestamp()
-  };
-  if (replyData) {
-    payload.replyTo = { id: replyData.id, senderName: replyData.senderName, text: replyData.text };
-    cancelReply();
-  }
-  try {
-    await addDoc(collection(db, 'posts'), payload);
-  } catch(e) { showToast('Erreur envoi message.', 'error'); }
-};
-
-window.deletePost = async function(id) {
-  if (!currentUser) { showToast('Accès refusé.', 'error'); return; }
-  if (!confirm('Supprimer ce message ?')) return;
-  try {
-    await deleteDoc(doc(db, 'posts', id));
-    showToast('Message supprimé.', 'success');
-  } catch(e) { showToast('Erreur suppression.', 'error'); }
-};
-
-// ─── UI HELPERS ───────────────────────────────────────────────────
-window.showPanel = function(panel) {
-  ['docs','chat'].forEach(p => {
-    document.getElementById(`panel-${p}`).classList.toggle('active', p === panel);
-    document.getElementById(`tab-${p}`).classList.toggle('active', p === panel);
-    document.getElementById(`nav-${p}`)?.classList.toggle('active', p === panel);
-  });
-  if (panel === 'chat') {
-    setTimeout(() => {
-      const c = document.getElementById('chat-messages');
-      if (c) c.scrollTop = c.scrollHeight;
-    }, 100);
-  }
-};
-
-window.openModal  = id => document.getElementById(id).classList.add('open');
-window.closeModal = id => {
-  document.getElementById(id).classList.remove('open');
-  if (id === 'modal-viewer') document.getElementById('viewer-frame-wrap').innerHTML = '';
-};
-
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+/* ─── ESC KEY: close fullscreen ─── */
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && currentView === "fullscreen") closeFsView();
 });
 
-window.openAddDoc = function() {
-  if (!currentUser) { showToast('Connectez-vous pour publier.', 'error'); return; }
-  openModal('modal-add-doc');
-};
-
-function hideSpinner() {
-  const s = document.getElementById('global-spinner');
-  s.classList.add('hidden');
-  setTimeout(() => s.style.display = 'none', 550);
-}
-setTimeout(hideSpinner, 4500);
-showPanel('docs');
 </script>
 </body>
 </html>
-
